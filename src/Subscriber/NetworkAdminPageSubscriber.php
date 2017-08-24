@@ -62,7 +62,7 @@ class NetworkAdminPageSubscriber extends AdminPageSubscriber
      */
     public function save_network_options($return = false)
     {
-        check_admin_referer($this->page->get_slug(). '-options');
+        check_admin_referer($this->page->get_slug() . '-options');
 
         $enforced_roles = array();
 
