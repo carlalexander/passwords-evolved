@@ -69,11 +69,11 @@ class TranslationsSubscriber implements SubscriberInterface
      */
     public function enforce_locale($locale, $domain)
     {
-        if ($domain != $this->domain) {
-            return $locale;
+        if ($domain == $this->domain) {
+            $locale = 'en_US';
         }
 
-        return 'en_US';
+        return $locale;
     }
 
     /**
