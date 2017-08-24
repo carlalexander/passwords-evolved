@@ -24,7 +24,7 @@ License: GPL3
 if (version_compare(PHP_VERSION, '5.3.7', '<')) {
     exit(sprintf('Passwords Evolved requires PHP 5.3.7 or higher. Your WordPress site is using PHP %s.', PHP_VERSION));
 } elseif (version_compare(PHP_VERSION, '5.5', '<')) {
-    include_once 'lib/password.php';
+    require_once 'lib/password.php';
 }
 
 // Check if we have curl available because the WP_Http class isn't able to interact with HIBP API properly.
