@@ -77,11 +77,7 @@ class Hasher
      */
     public function verify_password($password, $hash)
     {
-        if (strpos($hash, '$P$') === 0) {
-            return $this->verify_wordpress_password($password, $hash);
-        }
-
-        return password_verify($password, $hash);
+        return strpos($hash, '$P$') !== 0 ? password_verify($password, $hash) : $this->verify_wordpress_password($password, $hash);
     }
 
     /**
