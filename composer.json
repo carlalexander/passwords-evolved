@@ -1,0 +1,30 @@
+{
+  "name": "carlalexander/passwords-evolded",
+  "description": "WordPress password authentication for the modern era",
+  "keywords" : [ "wordpress", "passwords", "security", "authentication" ],
+  "type" : "wordpress-plugin",
+  "authors" : [
+    {
+      "name": "Carl Alexander",
+      "email": "contact@carlalexander.ca",
+      "homepage": "https://carlalexander.ca"
+    }
+  ],
+  "license": "GPL-3.0+",
+  "require": {
+    "php": ">=5.3.7"
+  },
+  "require-dev": {
+    "php-mock/php-mock-phpunit": "^0.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "PasswordsEvolved\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PasswordsEvolved\\Tests\\": "tests/PasswordsEvolved/"
+    }
+  }
+}
