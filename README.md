@@ -1,6 +1,6 @@
 # Passwords Evolved 
 
-[![Build Status](https://travis-ci.org/carlalexander/passwords-evolved.svg)](https://travis-ci.org/carlalexander/passwords-evolved)
+[![Build Status](https://travis-ci.org/carlalexander/passwords-evolved.svg)](https://travis-ci.org/carlalexander/passwords-evolved) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/?branch=master)
 
 ## What does this plugin do?
 
