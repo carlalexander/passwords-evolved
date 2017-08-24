@@ -1,0 +1,26 @@
+sudo: false
+
+language: php
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+php:
+    - 7.1
+    - 7.0
+    - 5.6
+    - 5.5
+    - 5.4
+    - hhvm
+
+env:
+    - WP_VERSION=latest
+
+before_script:
+    - composer self-update
+    - composer install -o --prefer-dist --no-interaction
+    - bash tests/bin/install-wp.sh $WP_VERSION
+
+script: phpunit
