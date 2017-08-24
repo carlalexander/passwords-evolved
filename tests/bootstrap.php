@@ -25,7 +25,7 @@ if ( ! $_core_dir ) {
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 if (version_compare(PHP_VERSION, '5.5', '<')) {
-    require_once dirname(__DIR__) . '/../lib/password.php';
+    require_once dirname(__DIR__) . '/lib/password.php';
 }
 
 require_once $_core_dir . '/wp-includes/class-phpass.php';
