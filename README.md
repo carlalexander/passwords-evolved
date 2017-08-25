@@ -2,6 +2,15 @@
 
 [![Build Status](https://travis-ci.org/carlalexander/passwords-evolved.svg)](https://travis-ci.org/carlalexander/passwords-evolved) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/?branch=master)
 
+A reimagining of WordPress authentication using modern security practices.
+
+This plugin **shouldn't** be used in a production environment. It exists mainly as a proof of concept to show how to design an object-oriented WordPress plugin. It also demonstrates how to do proper unit testing with WordPress.
+
+## Requirements
+
+ * PHP >= 5.3.7
+ * cURL extension
+
 ## What does this plugin do?
 
 The goal of this plugin is to shore up the WordPress authentication using standard security practice recommendations. At this time, the plugin improves WordPress authentication by doing the following:
@@ -21,6 +30,12 @@ The plugin also encrypts passwords using a the stronger [bcrypt](https://en.wiki
 You don't have to do anything to convert your password hash to bcrypt. The plugin will take care of converting it the next time that you log in after installing the plugin. If you decide to remove the plugin, you won't be able to log in again without resetting your password.
 
 It's also worth noting that using a stronger hashing function is only important in the advent of a data breach. A stronger password hashing function makes decrypting the passwords from the data breach a lot harder to do. This combined with the enforcement of uncompromised passwords will help ensure that those passwords are never decrypted. (Or at least without significant effort.)
+
+## FAQ
+
+**Wait so you send my password to a 3rd party!?**
+
+Yes, your password will be sent for verification to a 3rd party. If this is is an issue at all, **do not use this plugin**. Feel free to use it in a development environment, but you shouldn't use it in a production environment.
 
 ## Acknowledgements
 
