@@ -65,13 +65,20 @@ class UserWarningSubscriberTest extends \PHPUnit_Framework_TestCase
                       ->with($this->equalTo(42), $this->equalTo('passwords_evolved_warn_user'), $this->identicalTo(true))
                       ->willReturn(true);
 
+        $get_edit_profile_url = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'get_edit_profile_url');
+        $get_edit_profile_url->expects($this->once())
+                             ->with($this->equalTo(42))
+                             ->willReturn('profile_url');
+
+        $sprintf = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'sprintf');
+        $sprintf->expects($this->once())
+                ->with($this->equalTo('user_warning'), $this->equalTo('profile_url#password'));
+
         $update_user_meta = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'update_user_meta');
         $update_user_meta->expects($this->once())
                          ->with($this->equalTo(42), $this->equalTo('passwords_evolved_warn_user'), $this->identicalTo(false));
 
         $subscriber = new UserWarningSubscriber($user, $translator);
-
-        $this->setOutputCallback(function() {});
 
         $subscriber->display_warning();
     }

@@ -68,7 +68,7 @@ class UserWarningSubscriber implements SubscriberInterface
             return;
         }
 
-        echo sprintf('<div class="notice notice-warning is-dismissible"><p>%s</p></div>', $this->translate('message'));
+        echo sprintf($this->translate('message'), get_edit_profile_url($this->current_user->ID) . '#password');
 
         update_user_meta($this->current_user->ID, 'passwords_evolved_warn_user', false);
     }
