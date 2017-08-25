@@ -24,7 +24,7 @@ class Hasher
      *
      * @var int
      */
-    private $algorithm = PASSWORD_BCRYPT;
+    private $algorithm = \PASSWORD_BCRYPT;
 
     /**
      * WordPress password hasher.
