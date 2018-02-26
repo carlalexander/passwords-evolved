@@ -39,8 +39,6 @@ class TranslatableError extends \WP_Error
         if (!empty($code) && isset($this->errors[$code])) {
             $data = $this->get_error_data($code);
             return $this->translate_messages($this->errors[$code], $data);
-        } elseif (!empty($code) && !isset($translated_messages[$code])) {
-            return array();
         }
 
         $translated_messages = array();
