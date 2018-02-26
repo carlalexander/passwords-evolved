@@ -74,7 +74,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return new \stdClass();
         };
 
-
         $this->assertTrue(isset($this->container['null']));
         $this->assertTrue(isset($this->container['param']));
         $this->assertTrue(isset($this->container['service']));
@@ -169,7 +168,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Creates a mock of the plugin options class.
+     * Creates a mock of a ContainerConfigurationInterface object.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */

@@ -177,7 +177,7 @@ abstract class AbstractAdminPage
     abstract public function get_capability();
 
     /**
-     * Get the parent slug of the options page.
+     * Get the parent slug of the admin page.
      *
      * @return string
      */

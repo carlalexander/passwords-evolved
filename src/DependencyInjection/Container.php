@@ -96,9 +96,7 @@ class Container implements \ArrayAccess
             $this->lock();
         }
 
-        $is_factory = is_object($this->values[$key]) && method_exists($this->values[$key], '__invoke');
-
-        return $is_factory ? $this->values[$key]($this) : $this->values[$key];
+        return $this->values[$key] instanceof \Closure ? $this->values[$key]($this) : $this->values[$key];
     }
 
     /**

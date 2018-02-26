@@ -83,9 +83,9 @@ class AuthenticationSubscriber implements SubscriberInterface
         $capabilities = $user->get_role_caps();
         $enforce_password = empty($capabilities['passwords_evolved_enforce_password']) ? false : $capabilities['passwords_evolved_enforce_password'];
 
-        if ($password_compromised === true && $enforce_password) {
+        if (true === $password_compromised && $enforce_password) {
             return new TranslatableError('authentication', array('reset_password_url' => wp_lostpassword_url()));
-        } elseif ($password_compromised === true && !$enforce_password) {
+        } elseif (true === $password_compromised && !$enforce_password) {
             update_user_meta($user->ID, 'passwords_evolved_warn_user', true);
         }
 

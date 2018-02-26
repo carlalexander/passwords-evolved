@@ -23,7 +23,7 @@ if (!function_exists('wp_check_password')) {
      *
      * @param string $password
      * @param string $hash
-     * @param int $user_id
+     * @param int    $user_id
      *
      * @return bool
      */
@@ -46,7 +46,7 @@ if (!function_exists('wp_generate_password')) {
     /**
      * Generates a random password that hasn't been compromised.
      *
-     * @param int $length
+     * @param int  $length
      * @param bool $special_chars
      * @param bool $extra_special_chars
      *
@@ -86,7 +86,7 @@ if (!function_exists('wp_set_password')) {
      * using the given plain text password.
      *
      * @param string $password
-     * @param int $user_id
+     * @param int    $user_id
      *
      * @return string
      */
