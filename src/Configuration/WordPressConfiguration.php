@@ -39,6 +39,8 @@ class WordPressConfiguration implements ContainerConfigurationInterface
             return $wp_hasher;
         });
 
+        $container['wordpress.http_transport'] = _wp_http_get_object();
+
         $container['wordpress.roles'] = wp_roles();
 
         $container['wordpress.is_multisite'] = is_multisite();

@@ -28,6 +28,8 @@ if (version_compare(PHP_VERSION, '5.5', '<')) {
     require_once dirname(__DIR__) . '/lib/password.php';
 }
 
+require_once $_core_dir . '/wp-includes/class-requests.php';
+require_once $_core_dir . '/wp-includes/class-http.php';
 require_once $_core_dir . '/wp-includes/class-phpass.php';
 require_once $_core_dir . '/wp-includes/class-wp-error.php';
 require_once $_core_dir . '/wp-includes/class-wp-role.php';

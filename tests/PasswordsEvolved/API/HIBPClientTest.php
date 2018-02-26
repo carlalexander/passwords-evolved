@@ -18,171 +18,144 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
 {
     use PHPMock;
 
-    /**
-     * @var HIBPClient
-     */
-    private $client;
-
-    protected function setUp()
-    {
-        $this->client = new HIBPClient('version_number');
-    }
-
-    protected function tearDown()
-    {
-        $this->client = null;
-    }
-
     public function test_is_api_active()
     {
-        $handle = new \stdClass();
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->exactly(2))
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/A94A8'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturnOnConsecutiveCalls(
+                           $this->get_error_mock(),
+                           array('response' => array('code' => 200), 'body' => "1E4C9B93F3F0682250B6CF8331B7EE68FD8:42\nFE5CCB19BA61C4C0873D391E987982FBBD3:230\n")
+                       );
 
-        $curl_init = $this->getFunctionMock('PasswordsEvolved\API', 'curl_init');
-        $curl_init->expects($this->exactly(2))
-            ->with($this->equalTo('https://haveibeenpwned.com/api/v2/pwnedpassword/a94a8fe5ccb19ba61c4c0873d391e987982fbbd3'))
-            ->willReturn($handle);
+        $client = new HIBPClient($http_transport, 'version_number');
 
-        $curl_setopt = $this->getFunctionMock('PasswordsEvolved\API', 'curl_setopt');
-        $curl_setopt->expects($this->exactly(8))
-            ->withConsecutive(
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_TIMEOUT), $this->equalTo(2)),
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_HEADER), $this->identicalTo(false)),
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_RETURNTRANSFER), $this->identicalTo(true)),
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_USERAGENT), $this->equalTo('PasswordsEvolvedPlugin/version_number'))
-            );
-
-        $curl_exec = $this->getFunctionMock('PasswordsEvolved\API', 'curl_exec');
-        $curl_exec->expects($this->exactly(2))
-            ->with($this->identicalTo($handle));
-
-        $curl_getinfo = $this->getFunctionMock('PasswordsEvolved\API', 'curl_getinfo');
-        $curl_getinfo->expects($this->exactly(2))
-            ->with($this->identicalTo($handle), $this->equalTo(CURLINFO_HTTP_CODE))
-            ->willReturnOnConsecutiveCalls(200, 503);
-
-        $curl_close = $this->getFunctionMock('PasswordsEvolved\API', 'curl_close');
-        $curl_close->expects($this->exactly(2))
-            ->with($this->identicalTo($handle));
-
-        $this->assertTrue($this->client->is_api_active());
-        $this->assertFalse($this->client->is_api_active());
+        $this->assertFalse($client->is_api_active());
+        $this->assertTrue($client->is_api_active());
     }
 
-    public function test_is_password_compromised()
+    public function test_is_password_compromised_with_compromised_password()
     {
-        $handle = new \stdClass();
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->once())
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/5BAA6'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturn(array('response' => array('code' => 200), 'body' => "1E4C9B93F3F0682250B6CF8331B7EE68FD8:42\nFE5CCB19BA61C4C0873D391E987982FBBD3:230\n"));
 
-        $curl_init = $this->getFunctionMock('PasswordsEvolved\API', 'curl_init');
-        $curl_init->expects($this->exactly(4))
-                  ->withConsecutive(
-                      array($this->equalTo('https://haveibeenpwned.com/api/v2/pwnedpassword/0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33')),
-                      array($this->equalTo('https://haveibeenpwned.com/api/v2/pwnedpassword/foo')),
-                      array($this->equalTo('https://haveibeenpwned.com/api/v2/pwnedpassword/62cdb7020ff920e5aa642c3d4066950dd1f01f4d')),
-                      array($this->equalTo('https://haveibeenpwned.com/api/v2/pwnedpassword/bar'))
-                  )
-                  ->willReturn($handle);
+        $client = new HIBPClient($http_transport, 'version_number');
 
-        $curl_setopt = $this->getFunctionMock('PasswordsEvolved\API', 'curl_setopt');
-        $curl_setopt->expects($this->exactly(16))
-                    ->withConsecutive(
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_TIMEOUT), $this->equalTo(2)),
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_HEADER), $this->identicalTo(false)),
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_RETURNTRANSFER), $this->identicalTo(true)),
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_USERAGENT), $this->equalTo('PasswordsEvolvedPlugin/version_number'))
-                    );
-
-        $curl_exec = $this->getFunctionMock('PasswordsEvolved\API', 'curl_exec');
-        $curl_exec->expects($this->exactly(4))
-                  ->with($this->identicalTo($handle));
-
-        $curl_getinfo = $this->getFunctionMock('PasswordsEvolved\API', 'curl_getinfo');
-        $curl_getinfo->expects($this->exactly(4))
-                     ->with($this->identicalTo($handle), $this->equalTo(CURLINFO_HTTP_CODE))
-                     ->willReturnOnConsecutiveCalls(404, 404, 200, 200);
-
-        $curl_close = $this->getFunctionMock('PasswordsEvolved\API', 'curl_close');
-        $curl_close->expects($this->exactly(4))
-                   ->with($this->identicalTo($handle));
-
-        $this->assertFalse($this->client->is_password_compromised('foo'));
-        $this->assertFalse($this->client->is_password_compromised('foo', false));
-        $this->assertTrue($this->client->is_password_compromised('bar'));
-        $this->assertTrue($this->client->is_password_compromised('bar', false));
+        $this->assertTrue($client->is_password_compromised('password'));
     }
 
-    public function test_is_password_compromised_error()
+    public function test_is_password_compromised_with_uncompromised_password()
     {
-        $handle = new \stdClass();
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->once())
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/5BAA6'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturn(array('response' => array('code' => 200), 'body' => "1E4C9B93F3F0682250B6CF3456B7EE68FD8:42\nFE5CCB19BA61C4C0873D391E987982FBBD3:230\n"));
 
-        $curl_init = $this->getFunctionMock('PasswordsEvolved\API', 'curl_init');
-        $curl_init->expects($this->once())
-            ->with($this->equalTo('https://haveibeenpwned.com/api/v2/pwnedpassword/8843d7f92416211de9ebb963ff4ce28125932878'))
-            ->willReturn($handle);
+        $client = new HIBPClient($http_transport, 'version_number');
 
-        $curl_setopt = $this->getFunctionMock('PasswordsEvolved\API', 'curl_setopt');
-        $curl_setopt->expects($this->exactly(4))
-            ->withConsecutive(
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_TIMEOUT), $this->equalTo(2)),
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_HEADER), $this->identicalTo(false)),
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_RETURNTRANSFER), $this->identicalTo(true)),
-                array($this->identicalTo($handle), $this->equalTo(CURLOPT_USERAGENT), $this->equalTo('PasswordsEvolvedPlugin/version_number'))
-            );
+        $this->assertFalse($client->is_password_compromised('password'));
+    }
 
-        $curl_exec = $this->getFunctionMock('PasswordsEvolved\API', 'curl_exec');
-        $curl_exec->expects($this->once())
-            ->with($this->identicalTo($handle));
+    public function test_is_password_compromised_with_non_string_password()
+    {
+        $http_transport = $this->get_http_transport_mock();
 
-        $curl_getinfo = $this->getFunctionMock('PasswordsEvolved\API', 'curl_getinfo');
-        $curl_getinfo->expects($this->once())
-            ->with($this->identicalTo($handle), $this->equalTo(CURLINFO_HTTP_CODE))
-            ->willReturn(400);
+        $client = new HIBPClient($http_transport, 'version_number');
 
-        $curl_close = $this->getFunctionMock('PasswordsEvolved\API', 'curl_close');
-        $curl_close->expects($this->once())
-            ->with($this->identicalTo($handle));
+        $error = $client->is_password_compromised(new \stdClass());
 
-        $error = $this->client->is_password_compromised('foobar');
+        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertEquals('password_not_string', $error->get_error_code());
+    }
+
+    public function test_is_password_compromised_with_transport_error()
+    {
+        $error = $this->get_error_mock();
+
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->once())
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/5BAA6'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturn($error);
+
+        $client = new HIBPClient($http_transport, 'version_number');
+
+        $this->assertSame($error, $client->is_password_compromised('password'));
+    }
+
+    public function test_is_password_compromised_with_no_status_code()
+    {
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->once())
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/5BAA6'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturn(array());
+
+        $client = new HIBPClient($http_transport, 'version_number');
+
+        $error = $client->is_password_compromised('password');
+
+        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertEquals('response.no_status_code', $error->get_error_code());
+    }
+
+    public function test_is_password_compromised_with_invalid_response()
+    {
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->once())
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/5BAA6'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturn(array('response' => array('code' => 400)));
+
+        $client = new HIBPClient($http_transport, 'version_number');
+
+        $error = $client->is_password_compromised('password');
 
         $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
         $this->assertEquals('response.invalid', $error->get_error_code());
         $this->assertEquals(array('status_code' => 400), $error->get_error_data());
     }
 
-    public function test_is_password_compromised_rate_limit()
+    public function test_is_password_compromised_with_empty_body()
     {
-        $handle = new \stdClass();
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->once())
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/5BAA6'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturn(array('response' => array('code' => 200)));
 
-        $curl_init = $this->getFunctionMock('PasswordsEvolved\API', 'curl_init');
-        $curl_init->expects($this->exactly(2))
-                  ->with($this->equalTo('https://haveibeenpwned.com/api/v2/pwnedpassword/8843d7f92416211de9ebb963ff4ce28125932878'))
-                  ->willReturn($handle);
+        $client = new HIBPClient($http_transport, 'version_number');
 
-        $curl_setopt = $this->getFunctionMock('PasswordsEvolved\API', 'curl_setopt');
-        $curl_setopt->expects($this->exactly(8))
-                    ->withConsecutive(
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_TIMEOUT), $this->equalTo(2)),
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_HEADER), $this->identicalTo(false)),
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_RETURNTRANSFER), $this->identicalTo(true)),
-                        array($this->identicalTo($handle), $this->equalTo(CURLOPT_USERAGENT), $this->equalTo('PasswordsEvolvedPlugin/version_number'))
-                    );
+        $error = $client->is_password_compromised('password');
 
-        $curl_exec = $this->getFunctionMock('PasswordsEvolved\API', 'curl_exec');
-        $curl_exec->expects($this->exactly(2))
-            ->with($this->identicalTo($handle));
+        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertEquals('response.empty_body', $error->get_error_code());
+    }
 
-        $curl_getinfo = $this->getFunctionMock('PasswordsEvolved\API', 'curl_getinfo');
-        $curl_getinfo->expects($this->exactly(2))
-                     ->with($this->identicalTo($handle), $this->equalTo(CURLINFO_HTTP_CODE))
-                     ->willReturnOnConsecutiveCalls(429, 200);
+    /**
+     * Creates a mock of WP_Error object.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function get_error_mock()
+    {
+        return $this->getMockBuilder('WP_Error')
+                    ->getMock();
+    }
 
-        $curl_close = $this->getFunctionMock('PasswordsEvolved\API', 'curl_close');
-        $curl_close->expects($this->exactly(2))
-                    ->with($this->identicalTo($handle));
-
-        $sleep = $this->getFunctionMock('PasswordsEvolved\API', 'sleep');
-        $sleep->expects($this->once())
-              ->with($this->identicalTo(2));
-
-        $this->assertTrue($this->client->is_password_compromised('foobar'));
+    /**
+     * Creates a mock of WP_Http object.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function get_http_transport_mock()
+    {
+        return $this->getMockBuilder('WP_Http')
+                    ->getMock();
     }
 }

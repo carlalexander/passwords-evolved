@@ -25,7 +25,14 @@ class HIBPClient
      *
      * @var string
      */
-    const ENDPOINT_BASE = 'https://haveibeenpwned.com/api/v2';
+    const ENDPOINT_BASE = 'https://api.pwnedpasswords.com';
+
+    /**
+     * The WordPress HTTP transport.
+     *
+     * @var \WP_Http
+     */
+    private $http_transport;
 
     /**
      * The plugin version.
@@ -37,10 +44,12 @@ class HIBPClient
     /**
      * Constructor.
      *
-     * @param string $version
+     * @param \WP_Http $http_transport
+     * @param string   $version
      */
-    public function __construct($version)
+    public function __construct(\WP_Http $http_transport, $version)
     {
+        $this->http_transport = $http_transport;
         $this->version = $version;
     }
 
@@ -58,61 +67,79 @@ class HIBPClient
      * Checks with the HIBP API if the given password is a compromised password.
      *
      * @param string $password
-     * @param bool   $use_hash
      *
-     * @return bool|TranslatableError
+     * @return bool|\WP_Error
      */
-    public function is_password_compromised($password, $use_hash = true)
+    public function is_password_compromised($password)
     {
         if (!is_string($password)) {
             return new TranslatableError('password_not_string');
-        }
-
-        if ($use_hash) {
+        } elseif (!preg_match('/^[0-9a-f]{40}$/i', $password)) {
             $password = sha1($password);
         }
 
-        $status_code = $this->get_status_code(self::ENDPOINT_BASE . '/pwnedpassword/' . $password);
+        // Ensure that SHA1 string is in uppercase since the API uses uppercase SHA1 strings.
+        $password = strtoupper($password);
 
-        // 429 means we hit the rate limit. Wait 2 seconds and try again.
-        // https://haveibeenpwned.com/API/v2#RateLimiting
-        if (429 === $status_code) {
-            sleep(2);
+        $prefix = substr($password, 0, 5);
+        $suffix = substr($password, 5);
+        $suffixes = $this->get_suffixes($prefix);
 
-            $status_code = $this->get_status_code(self::ENDPOINT_BASE . '/pwnedpassword/' . $password);
+        if ($suffixes instanceof \WP_Error) {
+            return $suffixes;
         }
 
-        if (200 === $status_code) {
-            return true;
-        } elseif (404 === $status_code) {
-            return false;
-        }
-
-        return new TranslatableError('response.invalid', array('status_code' => $status_code));
+        return in_array($suffix, $suffixes);
     }
 
     /**
-     * Performs a GET request using curl to get the HTTP status code of the given URL.
+     * Extracts the status code from the given response.
      *
-     * @param string $url
+     * @param array $response
      *
-     * @return int
+     * @return int|null
      */
-    private function get_status_code($url)
+    private function get_response_status_code(array $response)
     {
-        $handle = curl_init($url);
+        if (!isset($response['response']) || !is_array($response['response']) || !isset($response['response']['code'])) {
+            return;
+        }
 
-        curl_setopt($handle, CURLOPT_TIMEOUT, 2);
-        curl_setopt($handle, CURLOPT_HEADER, false);
-        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handle, CURLOPT_USERAGENT, 'PasswordsEvolvedPlugin/' . $this->version);
+        return (int) $response['response']['code'];
+    }
 
-        curl_exec($handle);
+    /**
+     * Get all the password suffixes for the given password prefix.
+     *
+     * @param string $prefix
+     *
+     * @return array|\WP_Error
+     */
+    private function get_suffixes($prefix)
+    {
+        $response = $this->http_transport->get(self::ENDPOINT_BASE . '/range/' . $prefix, array(
+            'timeout' => 2,
+            'user-agent' => 'PasswordsEvolvedPlugin/' . $this->version,
+        ));
 
-        $status_code = (int) curl_getinfo($handle, CURLINFO_HTTP_CODE);
+        if ($response instanceof \WP_Error) {
+            return $response;
+        }
 
-        curl_close($handle);
+        $response_status_code = $this->get_response_status_code($response);
 
-        return $status_code;
+        if (null === $response_status_code) {
+            return new TranslatableError('response.no_status_code');
+        } elseif (200 != $response_status_code) {
+            return new TranslatableError('response.invalid', array('status_code' => $response_status_code));
+        } elseif (empty($response['body'])) {
+            return new TranslatableError('response.empty_body');
+        }
+
+        // array_map needed to fix a weird bug where strings returned by preg_replace were
+        // longer than 35 characters.
+        return array_map(function ($suffix) {
+            return substr($suffix, 0, 35);
+        }, preg_replace('/([0-9a-f]{35}):\d+/i', '$1', explode("\n", $response['body'])));
     }
 }

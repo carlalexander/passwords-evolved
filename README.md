@@ -4,12 +4,9 @@
 
 A reimagining of WordPress authentication using modern security practices.
 
-This plugin **shouldn't** be used in a production environment. It exists mainly as a proof of concept to show how to design an object-oriented WordPress plugin. It also demonstrates how to do proper unit testing with WordPress.
-
 ## Requirements
 
  * PHP >= 5.3.7
- * cURL extension
 
 ## What does this plugin do?
 
@@ -33,9 +30,11 @@ It's also worth noting that using a stronger hashing function is only important 
 
 ## FAQ
 
-**Wait so you send my password to a 3rd party!?**
+**Wait so are you sending my password to a 3rd party!?**
 
-Yes, your password will be sent for verification to a 3rd party. If this is is an issue at all, **do not use this plugin**. Feel free to use it in a development environment, but you shouldn't use it in a production environment.
+No, the plugin never sends your full password to a 3rd party for verification. The plugin only sends the first five characters of the [SHA-1](https://en.wikipedia.org/wiki/Sha1) hashed password to a 3rd party. The 3rd party then sends back all passwords with a hash that starts with those five characters. 
+
+The plugin then handles the rest of the password validation itself. It compares the SHA-1 hashed version of your password to the passwords returned by the 3rd party. We call this process [k-anonymity](https://en.wikipedia.org/wiki/K-anonymity). (You can read more about validating leaked passwords with it [here](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/).)
 
 ## Acknowledgements
 

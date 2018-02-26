@@ -28,7 +28,7 @@ class APIClientConfiguration implements ContainerConfigurationInterface
     public function modify(Container $container)
     {
         $container['api_client'] = $container->service(function (Container $container) {
-            return new HIBPClient($container['plugin_version']);
+            return new HIBPClient($container['wordpress.http_transport'], $container['plugin_version']);
         });
     }
 }

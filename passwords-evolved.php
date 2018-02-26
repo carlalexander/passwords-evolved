@@ -27,11 +27,6 @@ if (version_compare(PHP_VERSION, '5.3.7', '<')) {
     require_once 'lib/password.php';
 }
 
-// Check if we have curl available because the WP_Http class isn't able to interact with HIBP API properly.
-if (!extension_loaded('curl')) {
-    exit('Passwords Evolved requires that you have the PHP curl extension installed.');
-}
-
 // Setup class autoloader
 require_once dirname(__FILE__) . '/src/Autoloader.php';
 \PasswordsEvolved\Autoloader::register();
