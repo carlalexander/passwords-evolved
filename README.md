@@ -1,6 +1,6 @@
 # Passwords Evolved 
 
-[![Build Status](https://travis-ci.org/carlalexander/passwords-evolved.svg)](https://travis-ci.org/carlalexander/passwords-evolved) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/?branch=master)
+[![CircleCI](https://circleci.com/gh/carlalexander/passwords-evolved.svg?style=svg)](https://circleci.com/gh/carlalexander/passwords-evolved) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/?branch=master)
 
 A reimagining of WordPress authentication using modern security practices.
 

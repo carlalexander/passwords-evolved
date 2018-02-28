@@ -1,7 +1,7 @@
 {
   "name": "carlalexander/passwords-evolded",
   "description": "WordPress password authentication for the modern era",
-  "keywords" : [ "wordpress", "passwords", "security", "authentication" ],
+  "keywords" : [ "wordpress", "passwords", "security", "authentication", "password enforcement", "hibp", "have i been pwned" ],
   "type" : "wordpress-plugin",
   "authors" : [
     {
@@ -15,6 +15,8 @@
     "php": ">=5.3.7"
   },
   "require-dev": {
+    "doctrine/instantiator": "1.0.5",
+    "phpdocumentor/reflection-docblock": "2.0.5",
     "php-mock/php-mock-phpunit": "^0.3"
   },
   "autoload": {
