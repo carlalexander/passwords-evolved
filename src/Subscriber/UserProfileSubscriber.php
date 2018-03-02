@@ -52,6 +52,8 @@ class UserProfileSubscriber implements SubscriberInterface
     /**
      * Validate the new password submitted when adding or modifying a user.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param \WP_Error $error
      * @param bool      $update
      * @param mixed     $user

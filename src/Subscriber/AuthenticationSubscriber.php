@@ -67,6 +67,8 @@ class AuthenticationSubscriber implements SubscriberInterface
     /**
      * Validate the password that someone is using to authenticate.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param mixed  $user
      * @param string $username
      * @param string $password

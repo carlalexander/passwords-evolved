@@ -1,0 +1,32 @@
+parameters:
+  process_timeout: 120
+  tasks:
+    composer: ~
+    git_commit_message: ~
+    phpcpd:
+      exclude:
+        - lib
+        - tests
+        - vendor
+    phpcs:
+      whitelist_patterns:
+        - /^src
+    phpmd:
+      ruleset: ['codesize', 'design', 'naming', 'unusedcode']
+      exclude:
+        - lib
+        - tests
+        - vendor
+    phpunit:
+      always_execute: true
+      metadata:
+        priority: 100
+  testsuites:
+    code_quality:
+      tasks:
+        - composer
+        - git_blacklist
+        - git_commit_message
+        - phpcpd
+        - phpcs
+        - phpmd

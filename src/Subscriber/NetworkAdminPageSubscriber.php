@@ -58,6 +58,8 @@ class NetworkAdminPageSubscriber extends AdminPageSubscriber
     /**
      * Save the plugin network options when the admin page for is submitted.
      *
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     *
      * @param bool $return
      */
     public function save_network_options($return = false)

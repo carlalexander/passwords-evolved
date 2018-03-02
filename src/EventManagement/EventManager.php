@@ -51,6 +51,8 @@ class EventManager
     /**
      * Executes all the functions registered with the hook with the given name.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @param string $hook_name
      * @param mixed  $argument
      */
@@ -67,6 +69,8 @@ class EventManager
     /**
      * Filters the given value by applying all the changes associated with the hook with the given name to
      * the given value. Returns the filtered value.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @param string $hook_name
      * @param mixed  $value

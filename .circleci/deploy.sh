@@ -74,4 +74,4 @@ svn stat | grep '^?' | awk '{print $2}' | xargs -I x svn add x@
 svn stat | grep '^!' | awk '{print $2}' | xargs -I x svn rm --force x@
 
 # Commit to SVN
-svn ci --no-auth-cache --username $WP_ORG_USERNAME --password $WP_ORG_PASSWORD . -m "Deploy version $LATEST_SVN_TAG"
+svn ci --no-auth-cache --username $WP_ORG_USERNAME --password $WP_ORG_PASSWORD -m "Deploy version $LATEST_SVN_TAG"
