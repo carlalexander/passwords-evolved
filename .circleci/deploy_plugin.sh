@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 if [[ -z "$CIRCLECI" ]]; then
-    echo "This script can only be run by CircleCI" 1>&2
+    echo "This script can only be run by CircleCI." 1>&2
     exit 1
 fi
 
 if [[ -z "$WP_ORG_PASSWORD" ]]; then
-    echo "WordPress.org password not set" 1>&2
+    echo "WordPress.org password not set." 1>&2
     exit 1
 fi
 
 if [[ -z "$CIRCLE_BRANCH" || "$CIRCLE_BRANCH" != "master" ]]; then
-    echo "Build branch is required and must be 'master' branch" 1>&2
+    echo "Build branch is required and must be 'master' branch." 1>&2
     exit 0
 fi
 
@@ -32,7 +32,7 @@ TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$LATEST_SVN_TAG")
 error=$?
 if [ $error == 0 ]; then
     # Tag exists, don't deploy
-    echo "Tag already exists for version $LATEST_SVN_TAG, aborting deployment"
+    echo "Latest tag ($LATEST_SVN_TAG) already exists on the WordPress directory. No deployment needed!"
     exit 0
 fi
 

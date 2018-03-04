@@ -24,6 +24,11 @@ references:
       name: Copy vendor directory
       command: cp -R /tmp/vendor .
 
+  install_subversion: &install_subversion
+    run:
+      name: Install subversion
+      command: sudo apt-get install subversion
+
   # Default configuration for all phpunit testing jobs
   #
   test_job: &test_job
@@ -96,24 +101,33 @@ jobs:
     docker:
       - image: vandries/phpenv:5.4
 
-  deploy:
+  deploy_assets:
+      <<: *container_config
+      steps:
+        - checkout
+        - *attach_workspace
+        - *install_subversion
+        - run:
+            name: Deploy assets to WordPress plugin directory
+            command: .circleci/deploy_assets.sh
+
+  deploy_plugin:
     <<: *container_config
     steps:
       - checkout
       - *attach_workspace
       - *copy_vendor
-      - run:
-          name: Install subversion
-          command: sudo apt-get install subversion
+      - *install_subversion
       - run:
           name: Deploy new version to WordPress plugin directory
-          command: .circleci/deploy.sh
+          command: .circleci/deploy_plugin.sh
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
       - build
+      - deploy_assets
       - code_quality:
           requires:
             - build
@@ -135,7 +149,7 @@ workflows:
       - test_php54:
           requires:
             - code_quality
-      - deploy:
+      - deploy_plugin:
           requires:
             - test_php72
             - test_php71
