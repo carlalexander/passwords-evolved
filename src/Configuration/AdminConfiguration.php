@@ -29,11 +29,9 @@ class AdminConfiguration implements ContainerConfigurationInterface
     public function modify(Container $container)
     {
         $container['admin_page'] = $container->service(function (Container $container) {
-            if ($container['wordpress.is_multisite']) {
-                return new NetworkAdminPage($container['api_client'], $container['options'], $container['plugin_path'] . 'resources/templates/admin/', $container['translator']);
-            }
-
-            return new AdminPage($container['api_client'], $container['options'], $container['plugin_path'] . 'resources/templates/admin/', $container['translator']);
+            return $container['wordpress.is_multisite']
+                 ? new NetworkAdminPage($container['api_client'], $container['options'], $container['plugin_path'] . 'resources/templates/admin/', $container['translator'])
+                 : new AdminPage($container['api_client'], $container['options'], $container['plugin_path'] . 'resources/templates/admin/', $container['translator']);
         });
     }
 }

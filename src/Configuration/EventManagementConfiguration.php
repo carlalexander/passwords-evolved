@@ -49,11 +49,9 @@ class EventManagementConfiguration implements ContainerConfigurationInterface
                 new UserWarningSubscriber($container['wordpress.current_user'], $container['translator']),
             );
 
-            if ($container['wordpress.is_multisite']) {
-                $subscribers[] = new NetworkAdminPageSubscriber($container['options'], $container['admin_page'], $container['plugin_basename']);
-            } else {
-                $subscribers[] = new AdminPageSubscriber($container['admin_page'], $container['plugin_basename']);
-            }
+            $subscribers[] = $container['wordpress.is_multisite']
+                           ? new NetworkAdminPageSubscriber($container['options'], $container['admin_page'], $container['plugin_basename'])
+                           : new AdminPageSubscriber($container['admin_page'], $container['plugin_basename']);
 
             return $subscribers;
         });
