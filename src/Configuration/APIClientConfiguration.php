@@ -30,5 +30,9 @@ class APIClientConfiguration implements ContainerConfigurationInterface
         $container['api_client'] = $container->service(function (Container $container) {
             return new HIBPClient($container['wordpress.http_transport'], $container['plugin_version']);
         });
+
+        $container['api_active'] = $container->service(function (Container $container) {
+            return $container['api_client']->is_api_active();
+        });
     }
 }

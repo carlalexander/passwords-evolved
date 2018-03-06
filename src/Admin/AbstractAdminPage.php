@@ -23,11 +23,11 @@ use PasswordsEvolved\Translator;
 abstract class AbstractAdminPage
 {
     /**
-     * The HIBP API client.
+     * Flag whether the API is active or not.
      *
-     * @var HIBPClient
+     * @var bool
      */
-    protected $api_client;
+    protected $is_api_active;
 
     /**
      * The plugin options.
@@ -60,14 +60,14 @@ abstract class AbstractAdminPage
     /**
      * Constructor.
      *
-     * @param HIBPClient $api_client
      * @param Options    $options
      * @param string     $template_path
      * @param Translator $translator
+     * @param bool       $is_api_active
      */
-    public function __construct(HIBPClient $api_client, Options $options, $template_path, Translator $translator)
+    public function __construct(Options $options, $template_path, Translator $translator, $is_api_active = false)
     {
-        $this->api_client = $api_client;
+        $this->is_api_active = $is_api_active;
         $this->options = $options;
         $this->template_path = $template_path;
         $this->translator = $translator;

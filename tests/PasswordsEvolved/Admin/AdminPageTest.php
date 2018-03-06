@@ -36,7 +36,7 @@ class AdminPageTest extends \PHPUnit_Framework_TestCase
                    )
                    ->willReturnOnConsecutiveCalls('admin_page.section.title', 'admin_page.api_status.title', 'admin_page.enforced_roles.title');
 
-        $page = new AdminPage($this->get_api_client_mock(), $options, '/template/path', $translator);
+        $page = new AdminPage($options, '/template/path', $translator);
 
         $register_setting = $this->getFunctionMock('PasswordsEvolved\Admin', 'register_setting');
         $register_setting->expects($this->once())
@@ -57,7 +57,7 @@ class AdminPageTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_capability()
     {
-        $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $this->get_translator_mock());
+        $page = new AdminPage($this->get_options_mock(), '/template/path', $this->get_translator_mock());
 
         $this->assertEquals('install_plugins', $page->get_capability());
     }
@@ -70,7 +70,7 @@ class AdminPageTest extends \PHPUnit_Framework_TestCase
                    ->with($this->equalTo('admin_page.menu_title'))
                    ->willReturn('menu_title');
 
-        $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $translator);
+        $page = new AdminPage($this->get_options_mock(), '/template/path', $translator);
 
         $this->assertEquals('menu_title', $page->get_menu_title());
     }
@@ -83,7 +83,7 @@ class AdminPageTest extends \PHPUnit_Framework_TestCase
                    ->with($this->equalTo('admin_page.page_title'))
                    ->willReturn('page_title');
 
-        $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $translator);
+        $page = new AdminPage($this->get_options_mock(), '/template/path', $translator);
 
         $this->assertEquals('page_title', $page->get_page_title());
     }
@@ -95,14 +95,14 @@ class AdminPageTest extends \PHPUnit_Framework_TestCase
                   ->with($this->equalTo('options-general.php'))
                   ->willReturn('options-general.php');
 
-        $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $this->get_translator_mock());
+        $page = new AdminPage($this->get_options_mock(), '/template/path', $this->get_translator_mock());
 
         $this->assertEquals('options-general.php?page=passwords-evolved', $page->get_page_url());
     }
 
     public function test_get_parent_slug()
     {
-        $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $this->get_translator_mock());
+        $page = new AdminPage($this->get_options_mock(), '/template/path', $this->get_translator_mock());
 
         $this->assertEquals('options-general.php', $page->get_parent_slug());
     }
@@ -115,28 +115,16 @@ class AdminPageTest extends \PHPUnit_Framework_TestCase
                    ->with($this->equalTo('admin_page.plugins_page.title'))
                    ->willReturn('plugins_page.title');
 
-        $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $translator);
+        $page = new AdminPage($this->get_options_mock(), '/template/path', $translator);
 
         $this->assertEquals('plugins_page.title', $page->get_plugins_page_title());
     }
 
     public function test_get_slug()
     {
-        $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $this->get_translator_mock());
+        $page = new AdminPage($this->get_options_mock(), '/template/path', $this->get_translator_mock());
 
         $this->assertEquals('passwords-evolved', $page->get_slug());
-    }
-
-    /**
-     * Creates a mock of the HIBP API client.
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function get_api_client_mock()
-    {
-        return $this->getMockBuilder('PasswordsEvolved\API\HIBPClient')
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 
     /**
