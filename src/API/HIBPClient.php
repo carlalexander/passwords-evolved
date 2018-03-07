@@ -35,6 +35,13 @@ class HIBPClient
     private $http_transport;
 
     /**
+     * Flag whether the API is active or not.
+     *
+     * @var bool
+     */
+    private $is_active;
+
+    /**
      * The plugin version.
      *
      * @var string
@@ -60,7 +67,11 @@ class HIBPClient
      */
     public function is_api_active()
     {
-        return true === $this->is_password_compromised('test');
+        if (null === $this->is_active) {
+            $this->is_active = true === $this->is_password_compromised('test');
+        }
+
+        return $this->is_active;
     }
 
     /**
@@ -80,16 +91,13 @@ class HIBPClient
 
         // Ensure that SHA1 string is in uppercase since the API uses uppercase SHA1 strings.
         $password = strtoupper($password);
-
-        $prefix = substr($password, 0, 5);
-        $suffix = substr($password, 5);
-        $suffixes = $this->get_suffixes($prefix);
+        $suffixes = $this->get_suffixes(substr($password, 0, 5));
 
         if ($suffixes instanceof \WP_Error) {
             return $suffixes;
         }
 
-        return in_array($suffix, $suffixes);
+        return in_array(substr($password, 5), $suffixes);
     }
 
     /**

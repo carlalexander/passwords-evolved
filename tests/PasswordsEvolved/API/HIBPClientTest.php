@@ -18,21 +18,30 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
 {
     use PHPMock;
 
-    public function test_is_api_active()
+    public function test_is_api_active_with_response()
     {
         $http_transport = $this->get_http_transport_mock();
-        $http_transport->expects($this->exactly(2))
+        $http_transport->expects($this->once())
                        ->method('get')
                        ->with($this->identicalTo('https://api.pwnedpasswords.com/range/A94A8'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
-                       ->willReturnOnConsecutiveCalls(
-                           $this->get_error_mock(),
-                           array('response' => array('code' => 200), 'body' => "1E4C9B93F3F0682250B6CF8331B7EE68FD8:42\nFE5CCB19BA61C4C0873D391E987982FBBD3:230\n")
-                       );
+                       ->willReturn(array('response' => array('code' => 200), 'body' => "1E4C9B93F3F0682250B6CF8331B7EE68FD8:42\nFE5CCB19BA61C4C0873D391E987982FBBD3:230\n"));
+
+        $client = new HIBPClient($http_transport, 'version_number');
+
+        $this->assertTrue($client->is_api_active());
+    }
+
+    public function test_is_api_active_with_error()
+    {
+        $http_transport = $this->get_http_transport_mock();
+        $http_transport->expects($this->once())
+                       ->method('get')
+                       ->with($this->identicalTo('https://api.pwnedpasswords.com/range/A94A8'), $this->identicalTo(array('timeout' => 2,'user-agent' => 'PasswordsEvolvedPlugin/version_number')))
+                       ->willReturn($this->get_error_mock());
 
         $client = new HIBPClient($http_transport, 'version_number');
 
         $this->assertFalse($client->is_api_active());
-        $this->assertTrue($client->is_api_active());
     }
 
     public function test_is_password_compromised_with_compromised_password()
