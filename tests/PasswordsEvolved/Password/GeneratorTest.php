@@ -22,6 +22,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $api_client = $this->get_api_client_mock();
         $api_client->expects($this->once())
+                   ->method('is_api_active')
+                   ->willReturn(true);
+        $api_client->expects($this->once())
                    ->method('is_password_compromised')
                    ->with($this->equalTo('aaaaaaaaaaaaaaaa'))
                    ->willReturn(false);
@@ -39,6 +42,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function test_generate_password_all_characters()
     {
         $api_client = $this->get_api_client_mock();
+        $api_client->expects($this->once())
+                   ->method('is_api_active')
+                   ->willReturn(true);
         $api_client->expects($this->once())
                    ->method('is_password_compromised')
                    ->with($this->equalTo('aaaaaaaaaaaaaaaa'))
@@ -58,6 +64,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $api_client = $this->get_api_client_mock();
         $api_client->expects($this->once())
+                   ->method('is_api_active')
+                   ->willReturn(true);
+        $api_client->expects($this->once())
                    ->method('is_password_compromised')
                    ->with($this->equalTo('aaaaaaaaaaaaaaaa'))
                    ->willReturn(false);
@@ -72,7 +81,26 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('aaaaaaaaaaaaaaaa', $generator->generate_password(16, false));
     }
 
-    public function test_generate_password_skip_check()
+    public function test_generate_password_api_is_inactive()
+    {
+        $api_client = $this->get_api_client_mock();
+        $api_client->expects($this->once())
+                   ->method('is_api_active')
+                   ->willReturn(false);
+        $api_client->expects($this->never())
+                   ->method('is_password_compromised');
+
+        $wp_rand = $this->getFunctionMock('PasswordsEvolved\Password', 'wp_rand');
+        $wp_rand->expects($this->exactly(16))
+                ->with($this->identicalTo(0), $this->identicalTo(61))
+                ->willReturn(0);
+
+        $generator = new Generator($api_client);
+
+        $this->assertEquals('aaaaaaaaaaaaaaaa', $generator->generate_password(16, false));
+    }
+
+    public function test_generate_password_length_too_short()
     {
         $api_client = $this->get_api_client_mock();
         $api_client->expects($this->never())

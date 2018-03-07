@@ -57,7 +57,7 @@ class Generator
     {
         $password = $this->generate_random_password($length, $special_chars, $extra_special_chars);
 
-        if ($length < self::MIN_LENGTH) {
+        if ($length < self::MIN_LENGTH || !$this->api_client->is_api_active()) {
             return $password;
         }
 
