@@ -7,7 +7,7 @@ Tags: security, authentication, bcrypt, password enforcement, leaked password, c
 Requires at least: 4.8.0
 Tested up to: 4.9.4
 Requires PHP: 5.3.7
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -42,6 +42,10 @@ No, the plugin never sends your full password to a 3rd party for verification. T
 The plugin then handles the rest of the password validation itself. It compares the SHA-1 hashed version of your password to the passwords returned by the 3rd party. We call this process [k-anonymity](https://en.wikipedia.org/wiki/K-anonymity). (You can read more about validating leaked passwords with it [here](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/).)
 
 == Changelog ==
+
+= 1.1.1 =
+
+Improved how the API client and password generator handled if the API was online or not.
 
 = 1.1.0 =
 
