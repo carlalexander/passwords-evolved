@@ -8,6 +8,7 @@ references:
       - image: circleci/php:7.2
     environment:
       - WP_CORE_DIR: /tmp/wordpress
+      - WP_HOST: passwords-evolved.test
       - WP_ORG_PLUGIN_NAME: passwords-evolved
       - WP_ORG_USERNAME: carlalexander
     working_directory: ~/passwords-evolved
@@ -24,10 +25,34 @@ references:
       name: Copy vendor directory
       command: cp -R /tmp/vendor .
 
+  install_mysql_client: &install_mysql_client
+    run:
+      name: Install MySQL client
+      command: sudo apt-get install mysql-client
+
+  install_mysql_extension: &install_mysql_extension
+    run:
+      name: Install MySQL PHP extension
+      command: sudo docker-php-ext-install mysqli
+
   install_subversion: &install_subversion
     run:
       name: Install subversion
       command: sudo apt-get install subversion
+
+  start_php_server: &start_php_server
+    run:
+      name: Start PHP server
+      command: sudo php -S $WP_HOST:80 -t $WP_CORE_DIR
+      background: True
+
+  # Default configuration for all behat testing jobs
+  #
+  behat_job: &behat_job
+    <<: *container_config
+    docker:
+      - image: circleci/php:7.2
+      - image: circleci/mysql:5.7
 
   # Default configuration for all phpunit testing jobs
   #
@@ -101,6 +126,22 @@ jobs:
     docker:
       - image: vandries/phpenv:5.4
 
+  acceptance_wordpress:
+    <<: *behat_job
+    steps:
+      - checkout
+      - *attach_workspace
+      - *copy_vendor
+      - *install_mysql_client
+      - *install_mysql_extension
+      - run:
+          name: Setup WordPress
+          command: .circleci/setup-wp.sh
+      - *start_php_server
+      - run:
+          name: Run Behat tests
+          command: vendor/bin/behat --config .circleci/behat.yml --format progress
+
   deploy_assets:
       <<: *container_config
       steps:
@@ -149,7 +190,7 @@ workflows:
       - test_php54:
           requires:
             - code_quality
-      - deploy_plugin:
+      - acceptance_wordpress:
           requires:
             - test_php72
             - test_php71
@@ -157,3 +198,6 @@ workflows:
             - test_php56
             - test_php55
             - test_php54
+      - deploy_plugin:
+          requires:
+            - acceptance_wordpress

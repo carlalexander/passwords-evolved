@@ -2,6 +2,7 @@ parameters:
   process_timeout: 120
   tasks:
     composer: ~
+    gherkin: ~
     git_commit_message: ~
     phpcpd:
       exclude:
@@ -25,6 +26,7 @@ parameters:
     code_quality:
       tasks:
         - composer
+        - gherkin
         - phpcpd
         - phpcs
         - phpmd
