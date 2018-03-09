@@ -1,23 +1,31 @@
 #!/usr/bin/env bash
 
 if [[ -z "$CIRCLECI" ]]; then
-    echo "This script can only be run by CircleCI." 1>&2
+    echo "This script can only be run by CircleCI. Aborting." 1>&2
     exit 1
 fi
 
 if [[ -z "$WP_ORG_PASSWORD" ]]; then
-    echo "WordPress.org password not set." 1>&2
+    echo "WordPress.org password not set. Aborting." 1>&2
+    exit 1
+fi
+
+if [[ -z "$WP_ORG_PLUGIN_NAME" ]]; then
+    echo "WordPress.org plugin name not set. Aborting." 1>&2
+    exit 1
+fi
+
+if [[ -z "$WP_ORG_USERNAME" ]]; then
+    echo "WordPress.org username not set. Aborting." 1>&2
     exit 1
 fi
 
 if [[ -z "$CIRCLE_BRANCH" || "$CIRCLE_BRANCH" != "master" ]]; then
-    echo "Build branch is required and must be 'master' branch." 1>&2
+    echo "Build branch is required and must be 'master' branch. Stopping deployment." 1>&2
     exit 0
 fi
 
-PLUGIN="passwords-evolved"
 PLUGIN_SVN_PATH="/tmp/svn"
-WP_ORG_USERNAME="carlalexander"
 
 # Checkout the SVN repo
 svn co -q "http://svn.wp-plugins.org/$PLUGIN" $PLUGIN_SVN_PATH

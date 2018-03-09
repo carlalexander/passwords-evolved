@@ -7,9 +7,9 @@ references:
     docker:
       - image: circleci/php:7.2
     environment:
-      - WP_CORE_DIR: /tmp/wordpress/
-      - WP_TESTS_DIR: /tmp/wordpress-tests-lib
-      - WP_VERSION: latest
+      - WP_CORE_DIR: /tmp/wordpress
+      - WP_ORG_PLUGIN_NAME: passwords-evolved
+      - WP_ORG_USERNAME: carlalexander
     working_directory: ~/passwords-evolved
 
   workspace_root: &workspace_root
@@ -31,7 +31,7 @@ references:
 
   # Default configuration for all phpunit testing jobs
   #
-  test_job: &test_job
+  phpunit_job: &phpunit_job
     <<: *container_config
     steps:
       - checkout
@@ -51,7 +51,7 @@ jobs:
           command: composer install -n -o
       - run:
           name: Install WordPress
-          command: bash tests/bin/install-wp.sh $WP_VERSION
+          command: bash .circleci/install-wp.sh
       - persist_to_workspace:
           root: .
           paths:
@@ -72,32 +72,32 @@ jobs:
           command: vendor/bin/grumphp run --testsuite=code_quality
 
   test_php72:
-    <<: *test_job
+    <<: *phpunit_job
     docker:
       - image: circleci/php:7.2
 
   test_php71:
-    <<: *test_job
+    <<: *phpunit_job
     docker:
       - image: circleci/php:7.1
 
   test_php70:
-    <<: *test_job
+    <<: *phpunit_job
     docker:
       - image: circleci/php:7.0
 
   test_php56:
-    <<: *test_job
+    <<: *phpunit_job
     docker:
       - image: circleci/php:5.6
 
   test_php55:
-    <<: *test_job
+    <<: *phpunit_job
     docker:
       - image: vandries/phpenv:5.5
 
   test_php54:
-    <<: *test_job
+    <<: *phpunit_job
     docker:
       - image: vandries/phpenv:5.4
 
