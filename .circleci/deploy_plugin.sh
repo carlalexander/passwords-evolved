@@ -36,7 +36,7 @@ LATEST_GIT_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
 LATEST_SVN_TAG=${LATEST_GIT_TAG:1}
 
 # Check if the latest SVN tag exists already
-TAG=$(svn ls "https://plugins.svn.wordpress.org/$PLUGIN/tags/$LATEST_SVN_TAG")
+TAG=$(svn ls "https://plugins.svn.wordpress.org/$WP_ORG_PLUGIN_NAME/tags/$LATEST_SVN_TAG")
 error=$?
 if [ $error == 0 ]; then
     # Tag exists, don't deploy

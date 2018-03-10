@@ -28,7 +28,7 @@ fi
 PLUGIN_SVN_PATH="/tmp/svn"
 
 # Checkout the SVN repo
-svn co -q "http://svn.wp-plugins.org/$PLUGIN" $PLUGIN_SVN_PATH
+svn co -q "http://svn.wp-plugins.org/$WP_ORG_PLUGIN_NAME" $PLUGIN_SVN_PATH
 
 # Delete the assets directory
 rm -rf $PLUGIN_SVN_PATH/assets
