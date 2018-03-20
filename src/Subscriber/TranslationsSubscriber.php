@@ -35,6 +35,20 @@ class TranslationsSubscriber implements SubscriberInterface
     private $translations_path;
 
     /**
+     * The locale set for the website
+     *
+     * @var string
+     */
+    private $website_locale;
+
+    /**
+     * The used .mo file for this locale
+     *
+     * @var string
+     */
+    private $mofile;
+
+    /**
      * Constructor.
      *
      * @param string $domain
@@ -44,6 +58,8 @@ class TranslationsSubscriber implements SubscriberInterface
     {
         $this->domain = $domain;
         $this->translations_path = $translations_path;
+        $this->website_locale = get_locale();
+        $this->mofile =  dirname( dirname( dirname(__FILE__) ) ) . '/resources/translations/' . $domain . '-' . $this->website_locale . '.mo';
     }
 
     /**
@@ -69,10 +85,17 @@ class TranslationsSubscriber implements SubscriberInterface
      */
     public function enforce_locale($locale, $domain)
     {
-        if ($domain == $this->domain) {
-            $locale = 'en_US';
+
+        if ($domain !== $this->domain) {
+            return $locale;
+        }
+        if ( $locale === 'en_US') {
+            return $locale;
         }
 
+        if( !is_readable( $this->mofile ) ){
+            $locale = 'en_US';
+        }
         return $locale;
     }
 
