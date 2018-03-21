@@ -61,7 +61,7 @@ for FILE in "${PLUGIN_BUILD_FILES[@]}"; do
 done
 
 # Checkout the SVN repo
-svn co -q "http://svn.wp-plugins.org/$PLUGIN" $PLUGIN_SVN_PATH
+svn co -q "http://svn.wp-plugins.org/$WP_ORG_PLUGIN_NAME" $PLUGIN_SVN_PATH
 
 # Move to SVN directory
 cd $PLUGIN_SVN_PATH
