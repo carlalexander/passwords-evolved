@@ -1,5 +1,5 @@
 === Passwords Evolved ===
-Contributors: carlalexander
+Contributors: carlalexander, celsobessa
 Donate link: https://paypal.me/twigpress
 Author URI: https://carlalexander.ca
 Plugin URI: https://github.com/carlalexander/passwords-evolved
@@ -7,7 +7,7 @@ Tags: security, authentication, bcrypt, password enforcement, leaked password, c
 Requires at least: 4.8.0
 Tested up to: 4.9.4
 Requires PHP: 5.3.7
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -43,14 +43,27 @@ The plugin then handles the rest of the password validation itself. It compares 
 
 == Changelog ==
 
+= 1.1.2 =
+
+*Released: 2018-03-21*
+
+ * Added Brazilian Portuguese translation [celsobessa]
+ * Reworked how the plugin handles its default translation [carlalexander]
+
 = 1.1.1 =
+
+*Released: 2018-03-06*
 
 Improved how the API client and password generator handled if the API was online or not.
 
 = 1.1.0 =
 
+*Released: 2018-03-01*
+
 Reworked plugin to use the new version of the HIBP API (Have I been pwned? API) which supports k-anonymity. This allows the plugin to be used in production now.
 
 = 1.0.0 =
+
+*Released: 2017-08-24*
 
 Initial release
