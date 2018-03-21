@@ -35,20 +35,6 @@ class TranslationsSubscriber implements SubscriberInterface
     private $translations_path;
 
     /**
-     * The locale set for the website
-     *
-     * @var string
-     */
-    private $website_locale;
-
-    /**
-     * The used .mo file for this locale
-     *
-     * @var string
-     */
-    private $mofile;
-
-    /**
      * Constructor.
      *
      * @param string $domain
