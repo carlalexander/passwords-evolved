@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ -z "$CIRCLECI" ]]; then
-    echo "This script can only be run by CircleCI. Aborting." 1>&2
-    exit 1
-fi
-
-if [[ -z "$WP_CORE_DIR" ]]; then
-    echo "WordPress core directory isn't set. Aborting." 1>&2
-    exit 1
-fi
-
 WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
 WP_VERSION=${WP_VERSION-latest}
 

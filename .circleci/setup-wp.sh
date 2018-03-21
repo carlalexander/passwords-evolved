@@ -5,8 +5,8 @@ if [[ -z "$CIRCLECI" ]]; then
     exit 1
 fi
 
-if [[ -z "$WP_CORE_DIR" ]]; then
-    echo "WordPress core directory isn't set. Aborting." 1>&2
+if [[ -z "$WP_HOST" ]]; then
+    echo "WordPress host isn't set. Aborting." 1>&2
     exit 1
 fi
 
@@ -14,6 +14,8 @@ if [[ -z "$WP_ORG_PLUGIN_NAME" ]]; then
     echo "WordPress.org plugin name not set." 1>&2
     exit 1
 fi
+
+WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
 
 # Add host to hosts file
 echo "127.0.0.1 ${WP_HOST}" | sudo tee -a /etc/hosts

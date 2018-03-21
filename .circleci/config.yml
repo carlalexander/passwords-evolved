@@ -168,7 +168,11 @@ workflows:
   build_test_deploy:
     jobs:
       - build
-      - deploy_assets
+      - deploy_assets:
+          filters:
+            branches:
+              ignore:
+                - /pull\/\d+/
       - code_quality:
           requires:
             - build
@@ -199,5 +203,9 @@ workflows:
             - test_php55
             - test_php54
       - deploy_plugin:
+          filters:
+            branches:
+              ignore:
+                - /pull\/\d+/
           requires:
             - acceptance_wordpress
