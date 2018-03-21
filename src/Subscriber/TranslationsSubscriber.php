@@ -43,7 +43,7 @@ class TranslationsSubscriber implements SubscriberInterface
     public function __construct($domain, $translations_path)
     {
         $this->domain = $domain;
-        $this->translations_path = $translations_path;
+        $this->translations_path = trim($translations_path, '/');
     }
 
     /**
@@ -53,27 +53,31 @@ class TranslationsSubscriber implements SubscriberInterface
     {
         return array(
             'init' => 'register_translations',
-            'plugin_locale' => array('enforce_locale', 10, 2),
+            'load_textdomain_mofile' => array('ensure_default_translation', 10, 2),
         );
     }
 
     /**
-     * Enforces the use of the "en_US" locale for translations.
+     * Ensure that we load the "en_US" translation if there's no readable translation file.
      *
      * This is necessary since we're using placeholder values for text instead of english text.
      *
-     * @param string $locale
+     * @param string $mofile_path
      * @param string $domain
      *
      * @return string
      */
-    public function enforce_locale($locale, $domain)
+    public function ensure_default_translation($mofile_path, $domain)
     {
-        if ($domain == $this->domain) {
-            $locale = 'en_US';
+        if ($domain !== $this->domain || false === stripos($mofile_path, $this->translations_path)) {
+            return $mofile_path;
         }
 
-        return $locale;
+        if (!is_readable($mofile_path)) {
+            $mofile_path = preg_replace('/'.$this->domain.'-[a-z]{2}_[A-Z]{2}/', $this->domain.'-en_US', $mofile_path);
+        }
+
+        return $mofile_path;
     }
 
     /**
