@@ -42,21 +42,42 @@ class TranslationsSubscriberTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function test_enforce_locale_forces_english_locale_for_plugin()
+    public function test_ensure_default_translation_with_other_domain()
     {
-        $this->assertEquals('en_US', $this->subscriber->enforce_locale('es_ES', 'passwords-evolved-test'));
+        $this->assertEquals('/path/to/translation', $this->subscriber->ensure_default_translation('/path/to/translation', 'foo-domain'));
     }
 
-    public function test_enforce_locale_respects_other_domain()
+    public function test_ensure_default_translation_with_different_path()
     {
-        $this->assertEquals('es_ES', $this->subscriber->enforce_locale('es_ES', 'foo-domain'));
+        $this->assertEquals('/path/to/other/translation', $this->subscriber->ensure_default_translation('/path/to/other/translation', 'passwords-evolved-test'));
     }
+
+    public function test_ensure_default_translation_with_readable_translation()
+    {
+        $is_readable = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'is_readable');
+        $is_readable->expects($this->once())
+                    ->with($this->identicalTo('/path/to/translation'))
+                    ->willReturn(true);
+
+        $this->assertEquals('/path/to/translation', $this->subscriber->ensure_default_translation('/path/to/translation', 'passwords-evolved-test'));
+    }
+
+    public function test_ensure_default_translation_with_unreadable_translation()
+    {
+        $is_readable = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'is_readable');
+        $is_readable->expects($this->once())
+                    ->with($this->identicalTo('/path/to/translation/passwords-evolved-test-es_ES'))
+                    ->willReturn(false);
+
+        $this->assertEquals('/path/to/translation/passwords-evolved-test-en_US', $this->subscriber->ensure_default_translation('/path/to/translation/passwords-evolved-test-es_ES', 'passwords-evolved-test'));
+    }
+
 
     public function test_register_translations()
     {
         $load_plugin_textdomain = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'load_plugin_textdomain');
         $load_plugin_textdomain->expects($this->once())
-                               ->with($this->equalTo('passwords-evolved-test'), $this->identicalTo(false), $this->equalTo('/path/to/translation'));
+                               ->with($this->equalTo('passwords-evolved-test'), $this->identicalTo(false), $this->equalTo('path/to/translation'));
 
         $this->subscriber->register_translations();
     }
