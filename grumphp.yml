@@ -21,8 +21,6 @@ parameters:
         - vendor
     phpunit:
       always_execute: true
-      metadata:
-        priority: 100
   testsuites:
     code_quality:
       tasks:
