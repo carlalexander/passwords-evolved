@@ -12,6 +12,7 @@ parameters:
     phpcs:
       whitelist_patterns:
         - /^src
+    phplint: ~
     phpmd:
       ruleset: ['codesize', 'design', 'naming', 'unusedcode']
       exclude:
@@ -29,4 +30,5 @@ parameters:
         - gherkin
         - phpcpd
         - phpcs
+        - phplint
         - phpmd
