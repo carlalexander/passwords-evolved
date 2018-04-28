@@ -140,7 +140,23 @@ jobs:
       - *start_php_server
       - run:
           name: Run Behat tests
-          command: vendor/bin/behat --config .circleci/behat.yml --format progress
+          command: vendor/bin/behat --config .circleci/behat.yml --format progress --tags=wordpress
+
+  acceptance_multisite:
+    <<: *behat_job
+    steps:
+      - checkout
+      - *attach_workspace
+      - *copy_vendor
+      - *install_mysql_client
+      - *install_mysql_extension
+      - run:
+          name: Setup WordPress multisite
+          command: .circleci/setup-multisite.sh
+      - *start_php_server
+      - run:
+          name: Run Behat tests
+          command: vendor/bin/behat --config .circleci/behat.yml --format progress --tags=multisite
 
   deploy_assets:
       <<: *container_config
@@ -202,6 +218,14 @@ workflows:
             - test_php56
             - test_php55
             - test_php54
+      - acceptance_multisite:
+          requires:
+            - test_php72
+            - test_php71
+            - test_php70
+            - test_php56
+            - test_php55
+            - test_php54
       - deploy_plugin:
           filters:
             branches:
@@ -209,3 +233,4 @@ workflows:
                 - /pull\/\d+/
           requires:
             - acceptance_wordpress
+            - acceptance_multisite
