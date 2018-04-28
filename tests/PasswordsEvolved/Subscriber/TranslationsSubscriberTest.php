@@ -72,7 +72,6 @@ class TranslationsSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/path/to/translation/passwords-evolved-test-en_US', $this->subscriber->ensure_default_translation('/path/to/translation/passwords-evolved-test-es_ES', 'passwords-evolved-test'));
     }
 
-
     public function test_register_translations()
     {
         $load_plugin_textdomain = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'load_plugin_textdomain');

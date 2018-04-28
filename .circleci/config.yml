@@ -159,14 +159,14 @@ jobs:
           command: vendor/bin/behat --config .circleci/behat.yml --format progress --tags=multisite
 
   deploy_assets:
-      <<: *container_config
-      steps:
-        - checkout
-        - *attach_workspace
-        - *install_subversion
-        - run:
-            name: Deploy assets to WordPress plugin directory
-            command: .circleci/deploy_assets.sh
+    <<: *container_config
+    steps:
+      - checkout
+      - *attach_workspace
+      - *install_subversion
+      - run:
+          name: Deploy assets to WordPress plugin directory
+          command: .circleci/deploy_assets.sh
 
   deploy_plugin:
     <<: *container_config
