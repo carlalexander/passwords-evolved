@@ -16,6 +16,11 @@ references:
   workspace_root: &workspace_root
     /tmp
 
+  add_host: &add_host
+    run:
+      name: Add WordPress host to hosts file
+      command: echo "127.0.0.1 ${WP_HOST}" | sudo tee -a /etc/hosts
+
   attach_workspace: &attach_workspace
     attach_workspace:
       at: *workspace_root
@@ -130,6 +135,7 @@ jobs:
     <<: *behat_job
     steps:
       - checkout
+      - *add_host
       - *attach_workspace
       - *copy_vendor
       - *install_mysql_client
@@ -146,6 +152,7 @@ jobs:
     <<: *behat_job
     steps:
       - checkout
+      - *add_host
       - *attach_workspace
       - *copy_vendor
       - *install_mysql_client

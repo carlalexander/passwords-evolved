@@ -20,9 +20,6 @@ if [[ -z "$WP_ORG_PLUGIN_NAME" ]]; then
     exit 1
 fi
 
-# Add host to hosts file
-echo "127.0.0.1 ${WP_HOST}" | sudo tee -a /etc/hosts
-
 # Install WordPress
 vendor/bin/wp config create --path="${WP_CORE_DIR}" --dbhost="127.0.0.1" --dbname="circle_test" --dbuser="root"
 vendor/bin/wp core install --path="${WP_CORE_DIR}" --url="http://${WP_HOST}" --title="Passwords Evolved Test" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
