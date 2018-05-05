@@ -1,25 +1,31 @@
 version: 2.0
 
 references:
+  # Environment variables
+  #
+  WP_CORE_DIR: &WP_CORE_DIR
+    /tmp/wordpress
+  WP_HOST: &WP_HOST
+    passwords-evolved.test
+  WP_ORG_PLUGIN_NAME: &WP_ORG_PLUGIN_NAME
+    passwords-evolved
+  WP_ORG_USERNAME: &WP_ORG_USERNAME
+    carlalexander
+
   # Default container configuration
   #
   container_config: &container_config
     docker:
       - image: circleci/php:7.2
     environment:
-      - WP_CORE_DIR: /tmp/wordpress
-      - WP_HOST: passwords-evolved.test
-      - WP_ORG_PLUGIN_NAME: passwords-evolved
-      - WP_ORG_USERNAME: carlalexander
+      - WP_CORE_DIR: *WP_CORE_DIR
+      - WP_HOST: *WP_HOST
+      - WP_ORG_PLUGIN_NAME: *WP_ORG_PLUGIN_NAME
+      - WP_ORG_USERNAME: *WP_ORG_USERNAME
     working_directory: ~/passwords-evolved
 
   workspace_root: &workspace_root
     /tmp
-
-  add_host: &add_host
-    run:
-      name: Add WordPress host to hosts file
-      command: echo "127.0.0.1 ${WP_HOST}" | sudo tee -a /etc/hosts
 
   attach_workspace: &attach_workspace
     attach_workspace:
@@ -30,26 +36,10 @@ references:
       name: Copy vendor directory
       command: cp -R /tmp/vendor .
 
-  install_mysql_client: &install_mysql_client
-    run:
-      name: Install MySQL client
-      command: sudo apt-get install mysql-client
-
-  install_mysql_extension: &install_mysql_extension
-    run:
-      name: Install MySQL PHP extension
-      command: sudo docker-php-ext-install mysqli
-
   install_subversion: &install_subversion
     run:
       name: Install subversion
       command: sudo apt-get install subversion
-
-  start_php_server: &start_php_server
-    run:
-      name: Start PHP server
-      command: sudo php -S $WP_HOST:80 -t $WP_CORE_DIR
-      background: True
 
   # Default configuration for all behat testing jobs
   #
@@ -58,6 +48,29 @@ references:
     docker:
       - image: circleci/php:7.2
       - image: circleci/mysql:5.7
+    steps:
+      - checkout
+      - run:
+          name: Add WordPress host to hosts file
+          command: echo "127.0.0.1 ${WP_HOST}" | sudo tee -a /etc/hosts
+      - *attach_workspace
+      - *copy_vendor
+      - run:
+          name: Install MySQL client
+          command: sudo apt-get install mysql-client
+      - run:
+          name: Install MySQL PHP extension
+          command: sudo docker-php-ext-install mysqli
+      - run:
+          name: Setup WordPress
+          command: .circleci/setup-$WP_TYPE.sh
+      - run:
+          name: Start PHP server
+          command: sudo php -S $WP_HOST:80 -t $WP_CORE_DIR
+          background: True
+      - run:
+          name: Run Behat tests
+          command: vendor/bin/behat --config .circleci/behat.yml --format progress --tags=$WP_TYPE
 
   # Default configuration for all phpunit testing jobs
   #
@@ -131,39 +144,23 @@ jobs:
     docker:
       - image: vandries/phpenv:5.4
 
-  acceptance_wordpress:
+  acceptance_singlesite:
     <<: *behat_job
-    steps:
-      - checkout
-      - *add_host
-      - *attach_workspace
-      - *copy_vendor
-      - *install_mysql_client
-      - *install_mysql_extension
-      - run:
-          name: Setup WordPress
-          command: .circleci/setup-wp.sh
-      - *start_php_server
-      - run:
-          name: Run Behat tests
-          command: vendor/bin/behat --config .circleci/behat.yml --format progress --tags=wordpress
+    environment:
+      - WP_CORE_DIR: *WP_CORE_DIR
+      - WP_HOST: *WP_HOST
+      - WP_ORG_PLUGIN_NAME: *WP_ORG_PLUGIN_NAME
+      - WP_ORG_USERNAME: *WP_ORG_USERNAME
+      - WP_TYPE: singlesite
 
   acceptance_multisite:
     <<: *behat_job
-    steps:
-      - checkout
-      - *add_host
-      - *attach_workspace
-      - *copy_vendor
-      - *install_mysql_client
-      - *install_mysql_extension
-      - run:
-          name: Setup WordPress multisite
-          command: .circleci/setup-multisite.sh
-      - *start_php_server
-      - run:
-          name: Run Behat tests
-          command: vendor/bin/behat --config .circleci/behat.yml --format progress --tags=multisite
+    environment:
+      - WP_CORE_DIR: *WP_CORE_DIR
+      - WP_HOST: *WP_HOST
+      - WP_ORG_PLUGIN_NAME: *WP_ORG_PLUGIN_NAME
+      - WP_ORG_USERNAME: *WP_ORG_USERNAME
+      - WP_TYPE: multisite
 
   deploy_assets:
     <<: *container_config
@@ -217,7 +214,7 @@ workflows:
       - test_php54:
           requires:
             - code_quality
-      - acceptance_wordpress:
+      - acceptance_singlesite:
           requires:
             - test_php72
             - test_php71
@@ -239,5 +236,5 @@ workflows:
               ignore:
                 - /pull\/\d+/
           requires:
-            - acceptance_wordpress
+            - acceptance_singlesite
             - acceptance_multisite

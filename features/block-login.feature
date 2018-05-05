@@ -1,4 +1,4 @@
-@wordpress @multisite
+@singlesite @multisite
 Feature: Block login for compromised passwords
     In order to login to the WordPress admin
     As a WordPress administrator
