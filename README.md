@@ -24,7 +24,7 @@ The enforcement of uncompromised password also extends to when someone resets or
 
 The plugin also encrypts passwords using a the stronger [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) hashing function. This is also the current hashing function used by PHP. While no longer the strongest hashing function, bcrypt has been around since 1999 without any significant vulnerabilities found.
 
-You don't have to do anything to convert your password hash to bcrypt. The plugin will take care of converting it the next time that you log in after installing the plugin. If you decide to remove the plugin, you won't be able to log in again without resetting your password.
+You don't have to do anything to convert your password hash to bcrypt. The plugin will take care of converting it the next time that you log in after installing the plugin. If you decide to remove the plugin, your password will continue working and remain bcrypt encrypted until you reset it.
 
 It's also worth noting that using a stronger hashing function is only important in the advent of a data breach. A stronger password hashing function makes decrypting the passwords from the data breach a lot harder to do. This combined with the enforcement of uncompromised passwords will help ensure that those passwords are never decrypted. (Or at least without significant effort.)
 
