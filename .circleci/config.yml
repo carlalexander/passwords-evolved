@@ -177,7 +177,6 @@ jobs:
     steps:
       - checkout
       - *attach_workspace
-      - *copy_vendor
       - *install_subversion
       - run:
           name: Deploy new version to WordPress plugin directory
