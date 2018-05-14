@@ -170,7 +170,7 @@ jobs:
       - *install_subversion
       - run:
           name: Deploy assets to WordPress plugin directory
-          command: .circleci/deploy_assets.sh
+          command: .circleci/deploy-assets.sh
 
   deploy_plugin:
     <<: *container_config
@@ -180,7 +180,7 @@ jobs:
       - *install_subversion
       - run:
           name: Deploy new version to WordPress plugin directory
-          command: .circleci/deploy_plugin.sh
+          command: .circleci/deploy-plugin.sh
 
 workflows:
   version: 2
