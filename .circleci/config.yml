@@ -190,8 +190,8 @@ workflows:
       - deploy_assets:
           filters:
             branches:
-              ignore:
-                - /pull\/\d+/
+              only:
+                - master
       - code_quality:
           requires:
             - build
@@ -232,8 +232,8 @@ workflows:
       - deploy_plugin:
           filters:
             branches:
-              ignore:
-                - /pull\/\d+/
+              only:
+                - master
           requires:
             - acceptance_singlesite
             - acceptance_multisite
