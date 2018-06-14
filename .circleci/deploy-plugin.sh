@@ -73,7 +73,7 @@ rm -rf ./trunk
 cp -r $PLUGIN_BUILD_PATH ./trunk
 
 # Copy our new version of the plugin into new version tag directory
-cp -r $PLUGIN_BUILD_PATH ./tags/$LATEST_SVN_TAG
+svn cp ./trunk ./tags/$LATEST_SVN_TAG
 
 # Add new files to SVN
 svn stat | grep '^?' | awk '{print $2}' | xargs -I x svn add x@
