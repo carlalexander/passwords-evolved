@@ -25,7 +25,7 @@ if [[ -z "$WP_ORG_USERNAME" ]]; then
     exit 1
 fi
 
-PLUGIN_BUILD_DIRECTORIES=(lib resources src)
+PLUGIN_BUILD_DIRECTORIES=(resources src)
 PLUGIN_BUILD_FILES=(index.php LICENSE passwords-evolved.php pluggable.php readme.txt)
 PLUGIN_BUILD_PATH="/tmp/build"
 PLUGIN_SVN_PATH="/tmp/svn"
