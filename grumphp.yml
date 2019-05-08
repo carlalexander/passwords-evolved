@@ -10,6 +10,7 @@ parameters:
         - tests
         - vendor
     phpcs:
+      standard: PSR2
       whitelist_patterns:
         - /^src
     phplint: ~
