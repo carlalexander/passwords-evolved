@@ -12,12 +12,10 @@
 namespace PasswordsEvolved\Tests\DependencyInjection;
 
 use PasswordsEvolved\DependencyInjection\Container;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\DependencyInjection\ContainerConfigurationInterface;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
-
     /**
      * @var Container
      */
@@ -174,7 +172,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     private function get_configuration_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\DependencyInjection\ContainerConfigurationInterface')
-            ->getMock();
+        return $this->getMockBuilder(ContainerConfigurationInterface::class)->getMock();
     }
 }

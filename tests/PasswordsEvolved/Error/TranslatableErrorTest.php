@@ -12,11 +12,11 @@
 namespace PasswordsEvolved\Tests\Error;
 
 use PasswordsEvolved\Error\TranslatableError;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class TranslatableErrorTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_get_error_code()
     {
@@ -36,7 +36,7 @@ class TranslatableErrorTest extends \PHPUnit_Framework_TestCase
     {
         $error = new TranslatableError('test', array('foo' => 'bar'));
 
-        $__ = $this->getFunctionMock('PasswordsEvolved\Error', '__');
+        $__ = $this->getFunctionMock($this->getNamespace(TranslatableError::class), '__');
         $__->expects($this->once())
             ->with($this->equalTo('error.test'), $this->equalTo('passwords-evolved'))
             ->willReturn('foobar');
@@ -48,7 +48,7 @@ class TranslatableErrorTest extends \PHPUnit_Framework_TestCase
     {
         $error = new TranslatableError('test', array('foo' => 'bar'));
 
-        $__ = $this->getFunctionMock('PasswordsEvolved\Error', '__');
+        $__ = $this->getFunctionMock($this->getNamespace(TranslatableError::class), '__');
         $__->expects($this->once())
             ->with($this->equalTo('error.test'), $this->equalTo('passwords-evolved'))
             ->willReturn('foo "%s"');

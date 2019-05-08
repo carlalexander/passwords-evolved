@@ -12,11 +12,13 @@
 namespace PasswordsEvolved\Tests\Admin;
 
 use PasswordsEvolved\Admin\NetworkAdminPage;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Options;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
+use PasswordsEvolved\Translator;
 
 class NetworkAdminPageTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_configure()
     {
@@ -38,15 +40,15 @@ class NetworkAdminPageTest extends \PHPUnit_Framework_TestCase
 
         $page = new NetworkAdminPage($options, '/template/path', $translator);
 
-        $register_setting = $this->getFunctionMock('PasswordsEvolved\Admin', 'register_setting');
+        $register_setting = $this->getFunctionMock($this->getNamespace(NetworkAdminPage::class), 'register_setting');
         $register_setting->expects($this->once())
             ->with($this->equalTo('passwords-evolved'), $this->equalTo('enforced_roles'));
 
-        $add_settings_section = $this->getFunctionMock('PasswordsEvolved\Admin', 'add_settings_section');
+        $add_settings_section = $this->getFunctionMock($this->getNamespace(NetworkAdminPage::class), 'add_settings_section');
         $add_settings_section->expects($this->once())
             ->with($this->equalTo('passwords-evolved-section'), $this->equalTo('admin_page.section.title'), $this->identicalTo(array($page, 'render_section')), $this->equalTo('passwords-evolved'));
 
-        $add_settings_field = $this->getFunctionMock('PasswordsEvolved\Admin', 'add_settings_field');
+        $add_settings_field = $this->getFunctionMock($this->getNamespace(NetworkAdminPage::class), 'add_settings_field');
         $add_settings_field->expects($this->at(0))
             ->with($this->equalTo('passwords-evolved-api-status'), $this->equalTo('admin_page.api_status.title'), $this->identicalTo(array($page, 'render_api_status_field')), $this->equalTo('passwords-evolved'), $this->equalTo('passwords-evolved-section'));
         $add_settings_field->expects($this->at(1))
@@ -92,7 +94,7 @@ class NetworkAdminPageTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_page_url()
     {
-        $admin_url = $this->getFunctionMock('PasswordsEvolved\Admin', 'network_admin_url');
+        $admin_url = $this->getFunctionMock($this->getNamespace(NetworkAdminPage::class), 'network_admin_url');
         $admin_url->expects($this->once())
             ->with($this->equalTo('settings.php'))
             ->willReturn('settings.php');
@@ -137,8 +139,7 @@ class NetworkAdminPageTest extends \PHPUnit_Framework_TestCase
      */
     private function get_options_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\Options')
-            ->getMock();
+        return $this->getMockBuilder(Options::class)->getMock();
     }
 
     /**
@@ -148,8 +149,6 @@ class NetworkAdminPageTest extends \PHPUnit_Framework_TestCase
      */
     private function get_translator_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\Translator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(Translator::class)->disableOriginalConstructor()->getMock();
     }
 }

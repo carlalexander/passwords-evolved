@@ -12,18 +12,18 @@
 namespace PasswordsEvolved\Tests\Subscriber;
 
 use PasswordsEvolved\Subscriber\CapabilitiesSubscriber;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class CapabilitiesSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_get_subscribed_events()
     {
         $callbacks = CapabilitiesSubscriber::get_subscribed_events();
 
         foreach ($callbacks as $callback) {
-            $this->assertTrue(method_exists('PasswordsEvolved\Subscriber\CapabilitiesSubscriber', is_array($callback) ? $callback[0] : $callback));
+            $this->assertTrue(method_exists(CapabilitiesSubscriber::class, is_array($callback) ? $callback[0] : $callback));
         }
     }
 
@@ -54,9 +54,7 @@ class CapabilitiesSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_role_mock()
     {
-        return $this->getMockBuilder('WP_Role')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(\WP_Role::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -66,8 +64,6 @@ class CapabilitiesSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_roles_mock()
     {
-        return $this->getMockBuilder('WP_Roles')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(\WP_Roles::class)->disableOriginalConstructor()->getMock();
     }
 }

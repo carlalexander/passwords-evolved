@@ -11,19 +11,21 @@
 
 namespace PasswordsEvolved\Tests\Subscriber;
 
+use PasswordsEvolved\API\HIBPClient;
+use PasswordsEvolved\Error\TranslatableError;
 use PasswordsEvolved\Subscriber\AuthenticationSubscriber;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class AuthenticationSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_get_subscribed_events()
     {
         $callbacks = AuthenticationSubscriber::get_subscribed_events();
 
         foreach ($callbacks as $callback) {
-            $this->assertTrue(method_exists('PasswordsEvolved\Subscriber\AuthenticationSubscriber', is_array($callback) ? $callback[0] : $callback));
+            $this->assertTrue(method_exists(AuthenticationSubscriber::class, is_array($callback) ? $callback[0] : $callback));
         }
     }
 
@@ -47,7 +49,7 @@ class AuthenticationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('get_role_caps')
             ->willReturn(array('passwords_evolved_enforce_password' => true));
 
-        $wp_lostpassword_url = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'wp_lostpassword_url');
+        $wp_lostpassword_url = $this->getFunctionMock($this->getNamespace(AuthenticationSubscriber::class), 'wp_lostpassword_url');
         $wp_lostpassword_url->expects($this->once())
                             ->willReturn('url');
 
@@ -55,7 +57,7 @@ class AuthenticationSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $error = $subscriber->validate_password($user, 'username', 'password');
 
-        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertInstanceOf(TranslatableError::class, $error);
         $this->assertEquals('authentication', $error->get_error_code());
         $this->assertEquals(array('reset_password_url' => 'url'), $error->get_error_data());
     }
@@ -74,7 +76,7 @@ class AuthenticationSubscriberTest extends \PHPUnit_Framework_TestCase
              ->willReturn(array('passwords_evolved_enforce_password' => false));
         $user->ID = 42;
 
-        $update_user_meta = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'update_user_meta');
+        $update_user_meta = $this->getFunctionMock($this->getNamespace(AuthenticationSubscriber::class), 'update_user_meta');
         $update_user_meta->expects($this->once())
                          ->with($this->equalTo(42), $this->equalTo('passwords_evolved_warn_user'), $this->identicalTo(true));
 
@@ -115,9 +117,7 @@ class AuthenticationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_api_client_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\API\HIBPClient')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(HIBPClient::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -127,8 +127,6 @@ class AuthenticationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_user_mock()
     {
-        return $this->getMockBuilder('WP_User')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(\WP_User::class)->disableOriginalConstructor()->getMock();
     }
 }

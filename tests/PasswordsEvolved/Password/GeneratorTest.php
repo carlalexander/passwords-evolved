@@ -11,12 +11,13 @@
 
 namespace PasswordsEvolved\Tests\Password;
 
+use PasswordsEvolved\API\HIBPClient;
 use PasswordsEvolved\Password\Generator;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_generate_password()
     {
@@ -29,7 +30,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                    ->with($this->equalTo('aaaaaaaaaaaaaaaa'))
                    ->willReturn(false);
 
-        $wp_rand = $this->getFunctionMock('PasswordsEvolved\Password', 'wp_rand');
+        $wp_rand = $this->getFunctionMock($this->getNamespace(Generator::class), 'wp_rand');
         $wp_rand->expects($this->exactly(16))
                 ->with($this->identicalTo(0), $this->identicalTo(71))
                 ->willReturn(0);
@@ -50,7 +51,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                    ->with($this->equalTo('aaaaaaaaaaaaaaaa'))
                    ->willReturn(false);
 
-        $wp_rand = $this->getFunctionMock('PasswordsEvolved\Password', 'wp_rand');
+        $wp_rand = $this->getFunctionMock($this->getNamespace(Generator::class), 'wp_rand');
         $wp_rand->expects($this->exactly(16))
                 ->with($this->identicalTo(0), $this->identicalTo(91))
                 ->willReturn(0);
@@ -71,7 +72,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                    ->with($this->equalTo('aaaaaaaaaaaaaaaa'))
                    ->willReturn(false);
 
-        $wp_rand = $this->getFunctionMock('PasswordsEvolved\Password', 'wp_rand');
+        $wp_rand = $this->getFunctionMock($this->getNamespace(Generator::class), 'wp_rand');
         $wp_rand->expects($this->exactly(16))
                 ->with($this->identicalTo(0), $this->identicalTo(61))
                 ->willReturn(0);
@@ -90,7 +91,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $api_client->expects($this->never())
                    ->method('is_password_compromised');
 
-        $wp_rand = $this->getFunctionMock('PasswordsEvolved\Password', 'wp_rand');
+        $wp_rand = $this->getFunctionMock($this->getNamespace(Generator::class), 'wp_rand');
         $wp_rand->expects($this->exactly(16))
                 ->with($this->identicalTo(0), $this->identicalTo(61))
                 ->willReturn(0);
@@ -106,7 +107,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $api_client->expects($this->never())
                    ->method('is_password_compromised');
 
-        $wp_rand = $this->getFunctionMock('PasswordsEvolved\Password', 'wp_rand');
+        $wp_rand = $this->getFunctionMock($this->getNamespace(Generator::class), 'wp_rand');
         $wp_rand->expects($this->exactly(8))
                 ->with($this->identicalTo(0), $this->identicalTo(71))
                 ->willReturn(0);
@@ -123,8 +124,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private function get_api_client_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\API\HIBPClient')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(HIBPClient::class)->disableOriginalConstructor()->getMock();
     }
 }

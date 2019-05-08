@@ -11,19 +11,18 @@
 
 namespace PasswordsEvolved\Tests\Subscriber;
 
+use PasswordsEvolved\API\HIBPClient;
 use PasswordsEvolved\Subscriber\ResetPasswordSubscriber;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Translator;
 
 class ResetPasswordSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
-
     public function test_get_subscribed_events()
     {
         $callbacks = ResetPasswordSubscriber::get_subscribed_events();
 
         foreach ($callbacks as $callback) {
-            $this->assertTrue(method_exists('PasswordsEvolved\Subscriber\ResetPasswordSubscriber', is_array($callback) ? $callback[0] : $callback));
+            $this->assertTrue(method_exists(ResetPasswordSubscriber::class, is_array($callback) ? $callback[0] : $callback));
         }
     }
 
@@ -159,9 +158,7 @@ class ResetPasswordSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_api_client_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\API\HIBPClient')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(HIBPClient::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -171,9 +168,7 @@ class ResetPasswordSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function get_error_mock()
     {
-        return $this->getMockBuilder('WP_Error')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(\WP_Error::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -183,9 +178,7 @@ class ResetPasswordSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_translator_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\Translator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(Translator::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -195,8 +188,6 @@ class ResetPasswordSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_user_mock()
     {
-        return $this->getMockBuilder('WP_User')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(\WP_User::class)->disableOriginalConstructor()->getMock();
     }
 }

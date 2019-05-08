@@ -11,19 +11,20 @@
 
 namespace PasswordsEvolved\Tests\Subscriber;
 
+use PasswordsEvolved\Admin\AdminPage;
 use PasswordsEvolved\Subscriber\AdminPageSubscriber;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class AdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_get_subscribed_events()
     {
         $callbacks = AdminPageSubscriber::get_subscribed_events();
 
         foreach ($callbacks as $callback) {
-            $this->assertTrue(method_exists('PasswordsEvolved\Subscriber\AdminPageSubscriber', is_array($callback) ? $callback[0] : $callback));
+            $this->assertTrue(method_exists(AdminPageSubscriber::class, is_array($callback) ? $callback[0] : $callback));
         }
     }
 
@@ -46,7 +47,7 @@ class AdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
                    ->method('get_slug')
                    ->willReturn('slug');
 
-        $add_submenu_page = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'add_submenu_page');
+        $add_submenu_page = $this->getFunctionMock($this->getNamespace(AdminPageSubscriber::class), 'add_submenu_page');
         $add_submenu_page->expects($this->once())
                          ->with($this->equalTo('parent_slug'), $this->equalTo('page_title'), $this->equalTo('menu_title'), $this->equalTo('capability'), $this->equalTo('slug'), $this->identicalTo(array($admin_page, 'render_page')));
 
@@ -89,8 +90,6 @@ class AdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_admin_page_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\Admin\AdminPage')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(AdminPage::class)->disableOriginalConstructor()->getMock();
     }
 }

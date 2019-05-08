@@ -11,19 +11,21 @@
 
 namespace PasswordsEvolved\Tests\Subscriber;
 
+use PasswordsEvolved\Admin\NetworkAdminPage;
+use PasswordsEvolved\Options;
 use PasswordsEvolved\Subscriber\NetworkAdminPageSubscriber;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class NetworkAdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_get_subscribed_events()
     {
         $callbacks = NetworkAdminPageSubscriber::get_subscribed_events();
 
         foreach ($callbacks as $callback) {
-            $this->assertTrue(method_exists('PasswordsEvolved\Subscriber\NetworkAdminPageSubscriber', is_array($callback) ? $callback[0] : $callback));
+            $this->assertTrue(method_exists(NetworkAdminPageSubscriber::class, is_array($callback) ? $callback[0] : $callback));
         }
     }
 
@@ -46,7 +48,7 @@ class NetworkAdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
                    ->method('get_slug')
                    ->willReturn('slug');
 
-        $add_submenu_page = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'add_submenu_page');
+        $add_submenu_page = $this->getFunctionMock($this->getNamespace(NetworkAdminPageSubscriber::class), 'add_submenu_page');
         $add_submenu_page->expects($this->once())
                          ->with($this->equalTo('parent_slug'), $this->equalTo('page_title'), $this->equalTo('menu_title'), $this->equalTo('capability'), $this->equalTo('slug'), $this->identicalTo(array($admin_page, 'render_page')));
 
@@ -101,11 +103,11 @@ class NetworkAdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
                 ->method('set')
                 ->with($this->equalTo('enforced_roles'), $this->identicalTo(array()));
 
-        $check_admin_referer = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'check_admin_referer');
+        $check_admin_referer = $this->getFunctionMock($this->getNamespace(NetworkAdminPageSubscriber::class), 'check_admin_referer');
         $check_admin_referer->expects($this->once())
                             ->with($this->equalTo('slug-options'));
 
-        $wp_redirect = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'wp_redirect');
+        $wp_redirect = $this->getFunctionMock($this->getNamespace(NetworkAdminPageSubscriber::class), 'wp_redirect');
         $wp_redirect->expects($this->once())
                     ->with($this->equalTo('page_url&updated=true'));
 
@@ -133,11 +135,11 @@ class NetworkAdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
                 ->method('set')
                 ->with($this->equalTo('enforced_roles'), $this->identicalTo(array('administrator', 'editor')));
 
-        $check_admin_referer = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'check_admin_referer');
+        $check_admin_referer = $this->getFunctionMock($this->getNamespace(NetworkAdminPageSubscriber::class), 'check_admin_referer');
         $check_admin_referer->expects($this->once())
                             ->with($this->equalTo('slug-options'));
 
-        $wp_redirect = $this->getFunctionMock('PasswordsEvolved\Subscriber', 'wp_redirect');
+        $wp_redirect = $this->getFunctionMock($this->getNamespace(NetworkAdminPageSubscriber::class), 'wp_redirect');
         $wp_redirect->expects($this->once())
                     ->with($this->equalTo('page_url&updated=true'));
 
@@ -157,9 +159,7 @@ class NetworkAdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_network_admin_page_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\Admin\NetworkAdminPage')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(NetworkAdminPage::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -169,7 +169,6 @@ class NetworkAdminPageSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_options_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\Options')
-            ->getMock();
+        return $this->getMockBuilder(Options::class)->getMock();
     }
 }

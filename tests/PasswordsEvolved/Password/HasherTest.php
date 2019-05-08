@@ -12,15 +12,16 @@
 namespace PasswordsEvolved\Tests\Password;
 
 use PasswordsEvolved\Password\Hasher;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 use phpmock\phpunit\PHPMock;
 
 class HasherTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     public function test_hash_password()
     {
-        $password_hash = $this->getFunctionMock('PasswordsEvolved\Password', 'password_hash');
+        $password_hash = $this->getFunctionMock($this->getNamespace(Hasher::class), 'password_hash');
         $password_hash->expects($this->once())
                       ->with($this->equalTo('foobar'), $this->identicalTo(PASSWORD_BCRYPT))
                       ->willReturn('hashed_foobar');
@@ -32,7 +33,7 @@ class HasherTest extends \PHPUnit_Framework_TestCase
 
     public function test_is_hash_valid()
     {
-        $password_needs_rehash = $this->getFunctionMock('PasswordsEvolved\Password', 'password_needs_rehash');
+        $password_needs_rehash = $this->getFunctionMock($this->getNamespace(Hasher::class), 'password_needs_rehash');
         $password_needs_rehash->expects($this->once())
                               ->with($this->equalTo('hashed_foobar'), $this->identicalTo(PASSWORD_BCRYPT))
                               ->willReturn(true);
@@ -44,7 +45,7 @@ class HasherTest extends \PHPUnit_Framework_TestCase
 
     public function test_verify_password_with_php()
     {
-        $password_verify = $this->getFunctionMock('PasswordsEvolved\Password', 'password_verify');
+        $password_verify = $this->getFunctionMock($this->getNamespace(Hasher::class), 'password_verify');
         $password_verify->expects($this->once())
                         ->with($this->equalTo('foobar'), $this->equalTo('$2y$hashed_foobar'))
                         ->willReturn(true);
@@ -60,7 +61,7 @@ class HasherTest extends \PHPUnit_Framework_TestCase
 
     public function test_verify_password_with_wordpress()
     {
-        $password_verify = $this->getFunctionMock('PasswordsEvolved\Password', 'password_verify');
+        $password_verify = $this->getFunctionMock($this->getNamespace(Hasher::class), 'password_verify');
         $password_verify->expects($this->never());
 
         $wp_hasher = $this->get_wp_hasher_mock();
@@ -81,8 +82,6 @@ class HasherTest extends \PHPUnit_Framework_TestCase
      */
     private function get_wp_hasher_mock()
     {
-        return $this->getMockBuilder('PasswordHash')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(\PasswordHash::class)->disableOriginalConstructor()->getMock();
     }
 }

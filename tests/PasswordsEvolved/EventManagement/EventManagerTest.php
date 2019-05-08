@@ -12,11 +12,11 @@
 namespace PasswordsEvolved\Tests\EventManagement;
 
 use PasswordsEvolved\EventManagement\EventManager;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class EventManagerTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     /**
      * @var EventManager
@@ -35,7 +35,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function test_add_callback()
     {
-        $add_filter = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'add_filter');
+        $add_filter = $this->getFunctionMock($this->getNamespace(EventManager::class), 'add_filter');
         $add_filter->expects($this->once())
                    ->with($this->equalTo('foo'), $this->equalTo('on_foo'), $this->equalTo(5), $this->equalTo(2));
 
@@ -46,7 +46,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         $subscriber = new TestSubscriber();
 
-        $add_filter = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'add_filter');
+        $add_filter = $this->getFunctionMock($this->getNamespace(EventManager::class), 'add_filter');
         $add_filter->expects($this->exactly(3))
                    ->withConsecutive(
                        array($this->equalTo('foo'), $this->identicalTo(array($subscriber, 'on_foo')), $this->equalTo(10), $this->equalTo(1)),
@@ -59,7 +59,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function test_execute()
     {
-        $do_action_ref_array = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'do_action_ref_array');
+        $do_action_ref_array = $this->getFunctionMock($this->getNamespace(EventManager::class), 'do_action_ref_array');
         $do_action_ref_array->expects($this->once())
                             ->with($this->equalTo('foo'), $this->equalTo(array('bar')));
 
@@ -68,7 +68,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function test_filter()
     {
-        $apply_filters_ref_array = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'apply_filters_ref_array');
+        $apply_filters_ref_array = $this->getFunctionMock($this->getNamespace(EventManager::class), 'apply_filters_ref_array');
         $apply_filters_ref_array->expects($this->once())
                                 ->with($this->equalTo('foo'), $this->equalTo(array('bar')))
                                 ->willReturn('foobar');
@@ -78,7 +78,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function test_get_current_hook()
     {
-        $current_filter = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'current_filter');
+        $current_filter = $this->getFunctionMock($this->getNamespace(EventManager::class), 'current_filter');
         $current_filter->expects($this->once())
                        ->willReturn('foo');
 
@@ -87,7 +87,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function test_has_callback()
     {
-        $has_filter = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'has_filter');
+        $has_filter = $this->getFunctionMock($this->getNamespace(EventManager::class), 'has_filter');
         $has_filter->expects($this->once())
                    ->with($this->equalTo('foo'), $this->equalTo('on_foo'))
                    ->willReturn(10);
@@ -97,7 +97,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function test_remove_callback()
     {
-        $remove_filter = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'remove_filter');
+        $remove_filter = $this->getFunctionMock($this->getNamespace(EventManager::class), 'remove_filter');
         $remove_filter->expects($this->once())
                       ->with($this->equalTo('foo'), $this->equalTo('on_foo'), $this->equalTo(2))
                       ->willReturn(true);
@@ -109,7 +109,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         $subscriber = new TestSubscriber();
 
-        $remove_filter = $this->getFunctionMock('PasswordsEvolved\EventManagement', 'remove_filter');
+        $remove_filter = $this->getFunctionMock($this->getNamespace(EventManager::class), 'remove_filter');
         $remove_filter->expects($this->exactly(3))
                       ->withConsecutive(
                           array($this->equalTo('foo'), $this->identicalTo(array($subscriber, 'on_foo')), $this->equalTo(10)),

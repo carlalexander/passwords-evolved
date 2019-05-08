@@ -12,11 +12,11 @@
 namespace PasswordsEvolved\Tests;
 
 use PasswordsEvolved\Options;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
 class OptionsTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     /**
      * @var Options
@@ -40,7 +40,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function test_get()
     {
-        $get_option = $this->getFunctionMock('PasswordsEvolved', 'get_network_option');
+        $get_option = $this->getFunctionMock($this->getNamespace(Options::class), 'get_network_option');
         $get_option->expects($this->exactly(3))
                    ->withConsecutive(
                        array($this->identicalTo(null), $this->equalTo('passwords_evolved_foo'), $this->identicalTo(null)),
@@ -56,7 +56,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function test_has()
     {
-        $get_option = $this->getFunctionMock('PasswordsEvolved', 'get_network_option');
+        $get_option = $this->getFunctionMock($this->getNamespace(Options::class), 'get_network_option');
         $get_option->expects($this->at(0))
                    ->with($this->identicalTo(null), $this->equalTo('passwords_evolved_foo'), $this->equalTo(null))
                    ->willReturn('foobar');
@@ -70,7 +70,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function test_remove()
     {
-        $delete_option = $this->getFunctionMock('PasswordsEvolved', 'delete_network_option');
+        $delete_option = $this->getFunctionMock($this->getNamespace(Options::class), 'delete_network_option');
         $delete_option->expects($this->once())
                       ->with($this->identicalTo(null), $this->equalTo('passwords_evolved_foo'));
 
@@ -79,7 +79,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function test_set()
     {
-        $delete_option = $this->getFunctionMock('PasswordsEvolved', 'update_network_option');
+        $delete_option = $this->getFunctionMock($this->getNamespace(Options::class), 'update_network_option');
         $delete_option->expects($this->once())
                       ->with($this->identicalTo(null), $this->equalTo('passwords_evolved_foo'), $this->equalTo('bar'));
 

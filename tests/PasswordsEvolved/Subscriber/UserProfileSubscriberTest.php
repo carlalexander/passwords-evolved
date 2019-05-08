@@ -11,19 +11,18 @@
 
 namespace PasswordsEvolved\Tests\Subscriber;
 
+use PasswordsEvolved\API\HIBPClient;
+use PasswordsEvolved\Error\TranslatableError;
 use PasswordsEvolved\Subscriber\UserProfileSubscriber;
-use phpmock\phpunit\PHPMock;
 
 class UserProfileSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
-
     public function test_get_subscribed_events()
     {
         $callbacks = UserProfileSubscriber::get_subscribed_events();
 
         foreach ($callbacks as $callback) {
-            $this->assertTrue(method_exists('PasswordsEvolved\Subscriber\UserProfileSubscriber', is_array($callback) ? $callback[0] : $callback));
+            $this->assertTrue(method_exists(UserProfileSubscriber::class, is_array($callback) ? $callback[0] : $callback));
         }
     }
 
@@ -47,7 +46,7 @@ class UserProfileSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $subscriber->validate_password($error, true, $user);
 
-        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertInstanceOf(TranslatableError::class, $error);
         $this->assertEquals('user_profile', $error->get_error_code());
     }
 
@@ -121,7 +120,7 @@ class UserProfileSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $subscriber->validate_password($error, true, $user);
 
-        $this->assertNotInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertNotInstanceOf(TranslatableError::class, $error);
     }
 
     /**
@@ -131,9 +130,7 @@ class UserProfileSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function get_api_client_mock()
     {
-        return $this->getMockBuilder('PasswordsEvolved\API\HIBPClient')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(HIBPClient::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -143,8 +140,6 @@ class UserProfileSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function get_error_mock()
     {
-        return $this->getMockBuilder('WP_Error')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(\WP_Error::class)->disableOriginalConstructor()->getMock();
     }
 }

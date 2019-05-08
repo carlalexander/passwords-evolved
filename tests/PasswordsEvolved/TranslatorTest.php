@@ -11,12 +11,12 @@
 
 namespace PasswordsEvolved\Tests;
 
+use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 use PasswordsEvolved\Translator;
-use phpmock\phpunit\PHPMock;
 
 class TranslatorTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
+    use FunctionMockTrait;
 
     /**
      * @var Translator
@@ -35,7 +35,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function test_translate()
     {
-        $__ = $this->getFunctionMock('PasswordsEvolved', '__');
+        $__ = $this->getFunctionMock($this->getNamespace(Translator::class), '__');
         $__->expects($this->once())
            ->with($this->equalTo('foo'), $this->equalTo('passwords-evolved-test'))
            ->willReturn('bar');

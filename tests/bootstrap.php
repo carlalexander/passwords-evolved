@@ -24,6 +24,9 @@ if ( ! $_core_dir ) {
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+require_once $_core_dir . '/wp-includes/class.wp-dependencies.php';
+require_once $_core_dir . '/wp-includes/class.wp-scripts.php';
+require_once $_core_dir . '/wp-includes/class.wp-styles.php';
 require_once $_core_dir . '/wp-includes/class-requests.php';
 require_once $_core_dir . '/wp-includes/class-http.php';
 require_once $_core_dir . '/wp-includes/class-phpass.php';

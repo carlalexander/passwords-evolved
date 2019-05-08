@@ -12,12 +12,10 @@
 namespace PasswordsEvolved\Tests\API;
 
 use PasswordsEvolved\API\HIBPClient;
-use phpmock\phpunit\PHPMock;
+use PasswordsEvolved\Error\TranslatableError;
 
 class HIBPClientTest extends \PHPUnit_Framework_TestCase
 {
-    use PHPMock;
-
     public function test_is_api_active_with_response()
     {
         $http_transport = $this->get_http_transport_mock();
@@ -78,7 +76,7 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
 
         $error = $client->is_password_compromised(new \stdClass());
 
-        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertInstanceOf(TranslatableError::class, $error);
         $this->assertEquals('password_not_string', $error->get_error_code());
     }
 
@@ -109,7 +107,7 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
 
         $error = $client->is_password_compromised('password');
 
-        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertInstanceOf(TranslatableError::class, $error);
         $this->assertEquals('response.no_status_code', $error->get_error_code());
     }
 
@@ -125,7 +123,7 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
 
         $error = $client->is_password_compromised('password');
 
-        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertInstanceOf(TranslatableError::class, $error);
         $this->assertEquals('response.invalid', $error->get_error_code());
         $this->assertEquals(array('status_code' => 400), $error->get_error_data());
     }
@@ -142,7 +140,7 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
 
         $error = $client->is_password_compromised('password');
 
-        $this->assertInstanceOf('PasswordsEvolved\Error\TranslatableError', $error);
+        $this->assertInstanceOf(TranslatableError::class, $error);
         $this->assertEquals('response.empty_body', $error->get_error_code());
     }
 
@@ -153,8 +151,7 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
      */
     private function get_error_mock()
     {
-        return $this->getMockBuilder('WP_Error')
-                    ->getMock();
+        return $this->getMockBuilder(\WP_Error::class)->getMock();
     }
 
     /**
@@ -164,7 +161,6 @@ class HIBPClientTest extends \PHPUnit_Framework_TestCase
      */
     private function get_http_transport_mock()
     {
-        return $this->getMockBuilder('WP_Http')
-                    ->getMock();
+        return $this->getMockBuilder(\WP_Http::class)->getMock();
     }
 }
