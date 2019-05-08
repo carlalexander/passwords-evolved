@@ -21,10 +21,8 @@ License: GPL3
 */
 
 // PHP version check to check if we have to use the password_compat library.
-if (version_compare(PHP_VERSION, '5.3.7', '<')) {
-    exit(sprintf('Passwords Evolved requires PHP 5.3.7 or higher. Your WordPress site is using PHP %s.', PHP_VERSION));
-} elseif (version_compare(PHP_VERSION, '5.5', '<')) {
-    require_once 'lib/password.php';
+if (version_compare(PHP_VERSION, '5.6', '<')) {
+    exit(sprintf('Passwords Evolved requires PHP 5.6 or higher. Your WordPress site is using PHP %s.', PHP_VERSION));
 }
 
 // Setup class autoloader

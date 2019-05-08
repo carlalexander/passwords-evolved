@@ -6,7 +6,7 @@ A reimagining of WordPress authentication using modern security practices.
 
 ## Requirements
 
- * PHP >= 5.3.7
+ * PHP >= 5.6
 
 ## What does this plugin do?
 
@@ -40,4 +40,5 @@ The plugin then handles the rest of the password validation itself. It compares 
 
 This plugin wouldn't have be possible without the awesome work of [Troy Hunt](https://www.troyhunt.com). The original work for this plugin was based on recommendations from [this post](https://www.troyhunt.com/passwords-evolved-authentication-guidance-for-the-modern-era/).
 
-The initial inspiration for bcrypt password hashing code comes from the [roots](https://roots.io) team and their [wp-password-bcrypt](https://github.com/roots/wp-password-bcrypt) plugin. The plugin also uses [Anthony Ferrara](http://blog.ircmaxell.com/)'s [password_compat](https://github.com/ircmaxell/password_compat) library to offer bcrypt password hashing to WordPress sites using PHP 5.3 or 5.4. 
+The initial inspiration for bcrypt password hashing code comes from the [roots](https://roots.io) team and their [wp-password-bcrypt](https://github.com/roots/wp-password-bcrypt) plugin.
+ 

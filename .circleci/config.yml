@@ -134,16 +134,6 @@ jobs:
     docker:
       - image: circleci/php:5.6
 
-  test_php55:
-    <<: *phpunit_job
-    docker:
-      - image: vandries/phpenv:5.5
-
-  test_php54:
-    <<: *phpunit_job
-    docker:
-      - image: vandries/phpenv:5.4
-
   acceptance_singlesite:
     <<: *behat_job
     environment:
@@ -207,28 +197,18 @@ workflows:
       - test_php56:
           requires:
             - code_quality
-      - test_php55:
-          requires:
-            - code_quality
-      - test_php54:
-          requires:
-            - code_quality
       - acceptance_singlesite:
           requires:
             - test_php72
             - test_php71
             - test_php70
             - test_php56
-            - test_php55
-            - test_php54
       - acceptance_multisite:
           requires:
             - test_php72
             - test_php71
             - test_php70
             - test_php56
-            - test_php55
-            - test_php54
       - deploy_plugin:
           filters:
             branches:

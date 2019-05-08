@@ -4,9 +4,9 @@ Donate link: https://paypal.me/twigpress
 Author URI: https://carlalexander.ca
 Plugin URI: https://github.com/carlalexander/passwords-evolved
 Tags: security, authentication, bcrypt, password enforcement, leaked password, compromised password, hibp, have i been pwned
-Requires at least: 4.8.0
-Tested up to: 4.9.4
-Requires PHP: 5.3.7
+Requires at least: 5.2
+Tested up to: 5.2
+Requires PHP: 5.6
 Stable tag: 1.1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
