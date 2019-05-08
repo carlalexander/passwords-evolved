@@ -16,7 +16,7 @@ references:
   #
   container_config: &container_config
     docker:
-      - image: circleci/php:7.2
+      - image: circleci/php:7.3
     environment:
       - WP_CORE_DIR: *WP_CORE_DIR
       - WP_HOST: *WP_HOST
@@ -46,7 +46,7 @@ references:
   behat_job: &behat_job
     <<: *container_config
     docker:
-      - image: circleci/php:7.2
+      - image: circleci/php:7.3
       - image: circleci/mysql:5.7
     steps:
       - checkout
@@ -113,6 +113,11 @@ jobs:
       - run:
           name: Run code quality tests
           command: vendor/bin/grumphp run --testsuite=code_quality
+
+  test_php73:
+    <<: *phpunit_job
+    docker:
+      - image: circleci/php:7.3
 
   test_php72:
     <<: *phpunit_job
@@ -185,6 +190,9 @@ workflows:
       - code_quality:
           requires:
             - build
+      - test_php73:
+          requires:
+            - code_quality
       - test_php72:
           requires:
             - code_quality
@@ -199,12 +207,14 @@ workflows:
             - code_quality
       - acceptance_singlesite:
           requires:
+            - test_php73
             - test_php72
             - test_php71
             - test_php70
             - test_php56
       - acceptance_multisite:
           requires:
+            - test_php73
             - test_php72
             - test_php71
             - test_php70
