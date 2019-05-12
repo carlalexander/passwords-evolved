@@ -12,8 +12,8 @@
 namespace PasswordsEvolved;
 
 use PasswordsEvolved\DependencyInjection\Container;
-use PasswordsEvolved\Password\Generator;
-use PasswordsEvolved\Password\Hasher;
+use PasswordsEvolved\Password\Generator\PasswordGeneratorInterface;
+use PasswordsEvolved\Password\Hasher\PasswordHasherInterface;
 
 /**
  * Passwords Evolved Plugin.
@@ -71,7 +71,7 @@ class Plugin
     /**
      * Get the plugin password generator.
      *
-     * @return Generator
+     * @return PasswordGeneratorInterface
      */
     public function get_password_generator()
     {
@@ -81,7 +81,7 @@ class Plugin
     /**
      * Get the plugin password hasher.
      *
-     * @return Hasher
+     * @return PasswordHasherInterface
      */
     public function get_password_hasher()
     {

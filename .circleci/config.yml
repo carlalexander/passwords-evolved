@@ -41,6 +41,11 @@ references:
       name: Install subversion
       command: sudo apt-get install subversion
 
+  run_phpunit: &run_phpunit
+    run:
+      name: Run PHP unit tests
+      command: vendor/bin/phpunit --verbose
+
   # Default configuration for all behat testing jobs
   #
   behat_job: &behat_job
@@ -80,9 +85,26 @@ references:
       - checkout
       - *attach_workspace
       - *copy_vendor
+      - *run_phpunit
+
+  # Configuration for phpunit testing jobs that require libsodium. Only necessary before PHP 7.2.
+  #
+  libsodium_phpunit_job: &libsodium_phpunit_job
+    <<: *container_config
+    steps:
+      - checkout
+      - *attach_workspace
+      - *copy_vendor
       - run:
-          name: Run PHP unit tests
-          command: vendor/bin/phpunit
+          name: Install libsodium
+          command: sudo apt-get install libsodium-dev
+      - run:
+          name: Install libsodium PHP extension
+          command: sudo pecl install -f libsodium
+      - run:
+          name: Activate libsodium extension
+          command: sudo docker-php-ext-enable sodium
+      - *run_phpunit
 
 jobs:
   build:
@@ -124,15 +146,44 @@ jobs:
     docker:
       - image: circleci/php:7.2
 
+  test_php71_libsodium:
+    <<: *libsodium_phpunit_job
+    docker:
+      - image: circleci/php:7.1
+
   test_php71:
     <<: *phpunit_job
     docker:
       - image: circleci/php:7.1
 
+  test_php70_libsodium:
+    <<: *libsodium_phpunit_job
+    docker:
+      - image: circleci/php:7.0
+
   test_php70:
     <<: *phpunit_job
     docker:
       - image: circleci/php:7.0
+
+  test_php56_libsodium:
+    <<: *container_config
+    docker:
+      - image: circleci/php:5.6
+    steps:
+      - checkout
+      - *attach_workspace
+      - *copy_vendor
+      - run:
+          name: Install libsodium
+          command: sudo apt-get install libsodium-dev
+      - run:
+          name: Install libsodium PHP extension
+          command: sudo pecl install -f libsodium-1.0.6
+      - run:
+          name: Activate libsodium extension
+          command: sudo docker-php-ext-enable libsodium
+      - *run_phpunit
 
   test_php56:
     <<: *phpunit_job
@@ -196,10 +247,19 @@ workflows:
       - test_php72:
           requires:
             - code_quality
+      - test_php71_libsodium:
+          requires:
+            - code_quality
       - test_php71:
           requires:
             - code_quality
+      - test_php70_libsodium:
+          requires:
+            - code_quality
       - test_php70:
+          requires:
+            - code_quality
+      - test_php56_libsodium:
           requires:
             - code_quality
       - test_php56:
@@ -209,15 +269,21 @@ workflows:
           requires:
             - test_php73
             - test_php72
+            - test_php71_libsodium
             - test_php71
+            - test_php70_libsodium
             - test_php70
+            - test_php56_libsodium
             - test_php56
       - acceptance_multisite:
           requires:
             - test_php73
             - test_php72
+            - test_php71_libsodium
             - test_php71
+            - test_php70_libsodium
             - test_php70
+            - test_php56_libsodium
             - test_php56
       - deploy_plugin:
           filters:

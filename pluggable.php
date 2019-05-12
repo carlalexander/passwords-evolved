@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use PasswordsEvolved\Password\Generator;
+use PasswordsEvolved\Password\Generator\PasswordGeneratorInterface;
 
 /**
  * Pluggable functions used by the Passwords Evolved plugin.
@@ -32,9 +32,9 @@ if (!function_exists('wp_check_password')) {
         global $passwords_evolved;
         $hasher = $passwords_evolved->get_password_hasher();
 
-        $check = $hasher->verify_password($password, $hash);
+        $check = $hasher->is_password_valid($password, $hash);
 
-        if ($user_id && $hasher->is_hash_valid($hash)) {
+        if ($user_id && $check && !$hasher->is_hash_valid($hash)) {
             $hash = wp_set_password($password, $user_id);
         }
 
@@ -52,12 +52,11 @@ if (!function_exists('wp_generate_password')) {
      *
      * @return string
      */
-    function wp_generate_password($length = Generator::MIN_LENGTH, $special_chars = true, $extra_special_chars = false)
+    function wp_generate_password($length = PasswordGeneratorInterface::MIN_LENGTH, $special_chars = true, $extra_special_chars = false)
     {
         global $passwords_evolved;
-        $generator = $passwords_evolved->get_password_generator();
 
-        $password = $generator->generate_password($length, $special_chars, $extra_special_chars);
+        $password = $passwords_evolved->get_password_generator()->generate_password($length, $special_chars, $extra_special_chars);
 
         return apply_filters('random_password', $password);
     }
@@ -74,9 +73,8 @@ if (!function_exists('wp_hash_password')) {
     function wp_hash_password($password)
     {
         global $passwords_evolved;
-        $hasher = $passwords_evolved->get_password_hasher();
 
-        return $hasher->hash_password($password);
+        return $passwords_evolved->get_password_hasher()->hash_password(trim($password));
     }
 }
 

@@ -14,19 +14,23 @@
  */
 
 $_tests_dir = getenv('WP_TESTS_DIR');
-if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
+if (!$_tests_dir) {
+    $_tests_dir = '/tmp/wordpress-tests-lib';
+}
 
 $_core_dir = getenv('WP_CORE_DIR');
-
-if ( ! $_core_dir ) {
+if (!$_core_dir) {
     $_core_dir = '/tmp/wordpress';
 }
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-require_once $_core_dir . '/wp-includes/class.wp-dependencies.php';
-require_once $_core_dir . '/wp-includes/class.wp-scripts.php';
-require_once $_core_dir . '/wp-includes/class.wp-styles.php';
+// Use the same logic as WordPress for loading libsodium compatibility layer
+if (!function_exists('sodium_crypto_box')) {
+    require_once $_core_dir . '/wp-includes/sodium_compat/autoload.php';
+    var_dump(\ParagonIE_Sodium_Compat::crypto_pwhash_is_available());
+}
+
 require_once $_core_dir . '/wp-includes/class-requests.php';
 require_once $_core_dir . '/wp-includes/class-http.php';
 require_once $_core_dir . '/wp-includes/class-phpass.php';
