@@ -28,7 +28,6 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 // Use the same logic as WordPress for loading libsodium compatibility layer
 if (!function_exists('sodium_crypto_box')) {
     require_once $_core_dir . '/wp-includes/sodium_compat/autoload.php';
-    var_dump(\ParagonIE_Sodium_Compat::crypto_pwhash_is_available());
 }
 
 require_once $_core_dir . '/wp-includes/class-requests.php';
