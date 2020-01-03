@@ -57,6 +57,27 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $this->manager->add_subscriber($subscriber);
     }
 
+    public function test_add_event_manager_aware_subscriber()
+    {
+        $subscriber = new TestEventManagerAwareSubscriber();
+
+        $add_filter = $this->getFunctionMock($this->getNamespace(EventManager::class), 'add_filter');
+        $add_filter->expects($this->exactly(3))
+                   ->withConsecutive(
+                       array($this->equalTo('foo'), $this->identicalTo(array($subscriber, 'on_foo')), $this->equalTo(10), $this->equalTo(1)),
+                       array($this->equalTo('bar'), $this->identicalTo(array($subscriber, 'on_bar')), $this->equalTo(5), $this->equalTo(1)),
+                       array($this->equalTo('foobar'), $this->identicalTo(array($subscriber, 'on_foobar')), $this->equalTo(5), $this->equalTo(2))
+                   );
+
+        $this->manager->add_subscriber($subscriber);
+
+        $reflection = new \ReflectionObject($subscriber);
+        $eventManagerProperty = $reflection->getProperty('event_manager');
+        $eventManagerProperty->setAccessible(true);
+
+        $this->assertSame($this->manager, $eventManagerProperty->getValue($subscriber));
+    }
+
     public function test_execute()
     {
         $do_action_ref_array = $this->getFunctionMock($this->getNamespace(EventManager::class), 'do_action_ref_array');

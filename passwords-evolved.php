@@ -30,6 +30,7 @@ require_once dirname(__FILE__) . '/src/Autoloader.php';
 \PasswordsEvolved\Autoloader::register();
 
 // Load Passwords Evolved plugin
+global $passwords_evolved;
 $passwords_evolved = new \PasswordsEvolved\Plugin(__FILE__);
 add_action('after_setup_theme', array($passwords_evolved, 'load'));
 

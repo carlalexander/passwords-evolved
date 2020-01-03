@@ -11,6 +11,7 @@
 
 namespace PasswordsEvolved\Tests\Subscriber;
 
+use PasswordsEvolved\EventManagement\EventManager;
 use PasswordsEvolved\Subscriber\TranslationsSubscriber;
 use PasswordsEvolved\Tests\Traits\FunctionMockTrait;
 
@@ -74,10 +75,33 @@ class TranslationsSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function test_register_translations()
     {
-        $load_plugin_textdomain = $this->getFunctionMock($this->getNamespace(TranslationsSubscriber::class), 'load_plugin_textdomain');
-        $load_plugin_textdomain->expects($this->once())
-                               ->with($this->equalTo('passwords-evolved-test'), $this->identicalTo(false), $this->equalTo('path/to/translation'));
+        $determine_locale = $this->getFunctionMock($this->getNamespace(TranslationsSubscriber::class), 'determine_locale');
+        $determine_locale->expects($this->once())
+                         ->willReturn('en_US');
+
+        $event_manager = $this->get_event_manager_mock();
+        $event_manager->expects($this->once())
+                      ->method('filter')
+                      ->with($this->identicalTo('plugin_locale'), $this->identicalTo('en_US'), $this->identicalTo('passwords-evolved-test'))
+                      ->willReturn('en_US');
+
+        $load_textdomain = $this->getFunctionMock($this->getNamespace(TranslationsSubscriber::class), 'load_textdomain');
+        $load_textdomain->expects($this->once())
+                        ->with($this->equalTo('passwords-evolved-test'), $this->equalTo('/path/to/translation/passwords-evolved-test-en_US.mo'));
+
+
+        $this->subscriber->set_event_manager($event_manager);
 
         $this->subscriber->register_translations();
+    }
+
+    /**
+     * Creates a mock of an event manager object.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function get_event_manager_mock()
+    {
+        return $this->getMockBuilder(EventManager::class)->disableOriginalConstructor()->getMock();
     }
 }

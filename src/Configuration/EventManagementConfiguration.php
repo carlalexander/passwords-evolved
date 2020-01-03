@@ -44,7 +44,7 @@ class EventManagementConfiguration implements ContainerConfigurationInterface
                 new AuthenticationSubscriber($container['api_client']),
                 new CapabilitiesSubscriber($container['options']->get('enforced_roles', array('administrator')), $container['wordpress.roles']),
                 new ResetPasswordSubscriber($container['api_client'], $container['translator']),
-                new TranslationsSubscriber($container['plugin_domain'], $container['plugin_relative_path'] . '/resources/translations'),
+                new TranslationsSubscriber($container['plugin_domain'], $container['plugin_path'] . '/resources/translations'),
                 new UserProfileSubscriber($container['api_client']),
                 new UserWarningSubscriber($container['wordpress.current_user'], $container['translator']),
             );

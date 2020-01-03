@@ -27,4 +27,9 @@ vendor/bin/wp rewrite structure --path="${WP_CORE_DIR}" '/%postname%/'
 
 # Copy our plugin to WordPress directory
 mkdir ${WP_CORE_DIR}/wp-content/mu-plugins
+cat > ${WP_CORE_DIR}/wp-content/mu-plugins/${WP_ORG_PLUGIN_NAME}.php << EOF
+<?php
+
+require_once dirname(__FILE__) . '/${WP_ORG_PLUGIN_NAME}/${WP_ORG_PLUGIN_NAME}.php';
+EOF
 cp -r ./ ${WP_CORE_DIR}/wp-content/mu-plugins/${WP_ORG_PLUGIN_NAME}

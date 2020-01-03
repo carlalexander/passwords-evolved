@@ -18,7 +18,7 @@ use PasswordsEvolved\EventManagement\SubscriberInterface;
  *
  * @author Carl Alexander <contact@carlalexander.ca>
  */
-class TranslationsSubscriber implements SubscriberInterface
+class TranslationsSubscriber extends AbstractEventManagerAwareSubscriber
 {
     /**
      * The domain of the plugin translations.
@@ -43,7 +43,7 @@ class TranslationsSubscriber implements SubscriberInterface
     public function __construct($domain, $translations_path)
     {
         $this->domain = $domain;
-        $this->translations_path = trim($translations_path, '/');
+        $this->translations_path = rtrim($translations_path, '/');
     }
 
     /**
@@ -85,6 +85,6 @@ class TranslationsSubscriber implements SubscriberInterface
      */
     public function register_translations()
     {
-        load_plugin_textdomain($this->domain, false, $this->translations_path);
+        load_textdomain($this->domain, $this->translations_path.'/'.$this->domain.'-'.$this->event_manager->filter('plugin_locale', determine_locale(), $this->domain).'.mo');
     }
 }

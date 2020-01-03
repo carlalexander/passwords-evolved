@@ -43,6 +43,10 @@ class EventManager
      */
     public function add_subscriber(SubscriberInterface $subscriber)
     {
+        if ($subscriber instanceof EventManagerAwareInterface) {
+            $subscriber->set_event_manager($this);
+        }
+
         foreach ($subscriber->get_subscribed_events() as $hook_name => $parameters) {
             $this->add_subscriber_callback($subscriber, $hook_name, $parameters);
         }
