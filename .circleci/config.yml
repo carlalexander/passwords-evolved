@@ -222,6 +222,15 @@ jobs:
       - WP_ORG_USERNAME: *WP_ORG_USERNAME
       - WP_TYPE: multisite
 
+  acceptance_muplugins:
+    <<: *behat_job
+    environment:
+      - WP_CORE_DIR: *WP_CORE_DIR
+      - WP_HOST: *WP_HOST
+      - WP_ORG_PLUGIN_NAME: *WP_ORG_PLUGIN_NAME
+      - WP_ORG_USERNAME: *WP_ORG_USERNAME
+      - WP_TYPE: muplugins
+
   deploy_assets:
     <<: *container_config
     steps:
@@ -304,6 +313,17 @@ workflows:
             - test_php70
             - test_php56_libsodium
             - test_php56
+      - acceptance_muplugins:
+          requires:
+            - test_php74
+            - test_php73
+            - test_php72
+            - test_php71_libsodium
+            - test_php71
+            - test_php70_libsodium
+            - test_php70
+            - test_php56_libsodium
+            - test_php56
       - deploy_plugin:
           filters:
             branches:
@@ -312,3 +332,4 @@ workflows:
           requires:
             - acceptance_singlesite
             - acceptance_multisite
+            - acceptance_muplugins
