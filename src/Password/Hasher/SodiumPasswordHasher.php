@@ -90,7 +90,7 @@ class SodiumPasswordHasher implements PasswordHasherInterface
     {
         // Ugly check because PHP doesn't have an implementation for sodium_crypto_pwhash_str_needs_rehash
         // despite documentation for it.
-        return 0 === strpos($hash, '$argon2i$v=19$m=32768,t=4,p=1$');
+        return 0 !== preg_match('/^\$argon2id?\$v=19\$m=32768,t=4,p=1\$/', $hash);
     }
 
     /**
