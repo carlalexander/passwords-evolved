@@ -96,6 +96,9 @@ references:
       - *attach_workspace
       - *copy_vendor
       - run:
+          name: Update packages
+          command: sudo apt-get update
+      - run:
           name: Install libsodium
           command: sudo apt-get install libsodium-dev
       - run:
@@ -174,6 +177,9 @@ jobs:
       - checkout
       - *attach_workspace
       - *copy_vendor
+      - run:
+          name: Update packages
+          command: sudo apt-get update
       - run:
           name: Install libsodium
           command: sudo apt-get install libsodium-dev
