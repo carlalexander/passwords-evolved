@@ -3,7 +3,21 @@ parameters:
   tasks:
     composer: ~
     gherkin: ~
-    git_commit_message: ~
+    git_commit_message:
+      enforce_capitalized_subject: false
+      type_scope_conventions:
+        - types:
+          - build
+          - ci
+          - chore
+          - docs
+          - feat
+          - fix
+          - perf
+          - refactor
+          - revert
+          - style
+          - test
     phpcpd:
       exclude:
         - lib
@@ -27,6 +41,7 @@ parameters:
       tasks:
         - composer
         - gherkin
+        - git_commit_message
         - phpcpd
         - phpcs
         - phplint
