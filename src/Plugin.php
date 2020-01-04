@@ -35,7 +35,7 @@ class Plugin
      *
      * @var string
      */
-    const VERSION = '1.1.4';
+    const VERSION = '1.2.0';
 
     /**
      * The plugin's dependency injection container.

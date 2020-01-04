@@ -5,9 +5,9 @@ Author URI: https://carlalexander.ca
 Plugin URI: https://github.com/carlalexander/passwords-evolved
 Tags: security, authentication, password enforcement, password hashing, argon2, argon2i, argon2id, bcrypt, libsodium, leaked password, compromised password, hibp, have i been pwned
 Requires at least: 5.2
-Tested up to: 5.2
+Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 1.1.4
+Stable tag: 1.2.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -42,6 +42,13 @@ No, the plugin never sends your full password to a 3rd party for verification. T
 The plugin then handles the rest of the password validation itself. It compares the SHA-1 hashed version of your password to the passwords returned by the 3rd party. We call this process [k-anonymity](https://en.wikipedia.org/wiki/K-anonymity). (You can read more about validating leaked passwords with it [here](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/).)
 
 == Changelog ==
+
+= 1.2.0 =
+
+*Released: 2020-01-03*
+
+ * Fixed fatal error when installed as a mu-plugin [carlalexander]
+ * Added support for libsodium [carlalexander]
 
 = 1.1.4 =
 
