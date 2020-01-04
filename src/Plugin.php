@@ -11,6 +11,7 @@
 
 namespace PasswordsEvolved;
 
+use PasswordsEvolved\Configuration;
 use PasswordsEvolved\DependencyInjection\Container;
 use PasswordsEvolved\Password\Generator\PasswordGeneratorInterface;
 use PasswordsEvolved\Password\Hasher\PasswordHasherInterface;
@@ -108,13 +109,13 @@ class Plugin
         }
 
         $this->container->configure(array(
-            'PasswordsEvolved\Configuration\AdminConfiguration',
-            'PasswordsEvolved\Configuration\APIClientConfiguration',
-            'PasswordsEvolved\Configuration\EventManagementConfiguration',
-            'PasswordsEvolved\Configuration\OptionsConfiguration',
-            'PasswordsEvolved\Configuration\PasswordConfiguration',
-            'PasswordsEvolved\Configuration\TranslatorConfiguration',
-            'PasswordsEvolved\Configuration\WordPressConfiguration',
+            Configuration\AdminConfiguration::class,
+            Configuration\APIClientConfiguration::class,
+            Configuration\EventManagementConfiguration::class,
+            Configuration\OptionsConfiguration::class,
+            Configuration\PasswordConfiguration::class,
+            Configuration\TranslatorConfiguration::class,
+            Configuration\WordPressConfiguration::class,
         ));
 
         foreach ($this->container['subscribers'] as $subscriber) {
