@@ -143,8 +143,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function test_service()
     {
-        $this->container['service'] = $this->container->service(function(Container $container) {
-           return new \stdClass();
+        $this->container['service'] = $this->container->service(function (Container $container) {
+            return new \stdClass();
         });
 
         $foo_service = $this->container['service'];
