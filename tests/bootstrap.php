@@ -37,3 +37,4 @@ require_once $_core_dir . '/wp-includes/class-wp-error.php';
 require_once $_core_dir . '/wp-includes/class-wp-role.php';
 require_once $_core_dir . '/wp-includes/class-wp-roles.php';
 require_once $_core_dir . '/wp-includes/class-wp-user.php';
+require_once $_core_dir . '/wp-includes/plugin.php';

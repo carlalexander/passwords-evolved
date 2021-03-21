@@ -119,6 +119,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Downgrade composer to v1
+          command: sudo composer self-update --1
+      - run:
           name: Install dependencies
           command: composer install -n -o
       - run:
@@ -139,6 +142,9 @@ jobs:
       - checkout
       - *attach_workspace
       - *copy_vendor
+      - run:
+          name: Downgrade xdebug
+          command: sudo pecl uninstall xdebug && sudo pecl install xdebug-2.7.1
       - run:
           name: Run code quality tests
           command: vendor/bin/grumphp run --testsuite=code_quality
