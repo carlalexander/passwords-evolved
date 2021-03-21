@@ -1,5 +1,5 @@
 === Passwords Evolved ===
-Contributors: carlalexander, celsobessa
+Contributors: carlalexander, celsobessa, carstenbach
 Donate link: https://paypal.me/twigpress
 Author URI: https://carlalexander.ca
 Plugin URI: https://github.com/carlalexander/passwords-evolved
