@@ -1,0 +1,17 @@
+name: Update plugin assets and readme on WordPress.org
+on:
+  push:
+    branches:
+      - main
+jobs:
+  update-assets-readme:
+    name: Update plugin assets and readme on WordPress.org
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update plugin assets and readme
+        uses: 10up/action-wordpress-plugin-asset-update@develop
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          IGNORE_OTHER_FILES: true
