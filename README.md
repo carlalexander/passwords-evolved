@@ -1,6 +1,6 @@
 # Passwords Evolved 
 
-[![Actions Status](https://github.com/carlalexander/passwords-evolved/workflows/Continuous%20Integration/badge.svg)](https://github.com/ymirapp/wordpress-plugin/actions) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/carlalexander/passwords-evolved/?branch=master)
+[![Actions Status](https://github.com/carlalexander/passwords-evolved/workflows/Continuous%20Integration/badge.svg)](https://github.com/ymirapp/wordpress-plugin/actions)
 
 A reimagining of WordPress authentication using modern security practices.
 
