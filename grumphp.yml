@@ -1,8 +1,7 @@
-parameters:
+grumphp:
   process_timeout: 120
   tasks:
     composer: ~
-    gherkin: ~
     git_commit_message:
       enforce_capitalized_subject: false
       type_scope_conventions:
@@ -23,10 +22,6 @@ parameters:
         - lib
         - tests
         - vendor
-    phpcs:
-      standard: PSR2
-      whitelist_patterns:
-        - /^src
     phplint: ~
     phpmd:
       ruleset: ['codesize', 'design', 'naming', 'unusedcode']
@@ -40,9 +35,7 @@ parameters:
     code_quality:
       tasks:
         - composer
-        - gherkin
         - git_commit_message
         - phpcpd
-        - phpcs
         - phplint
         - phpmd
