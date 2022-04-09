@@ -1,5 +1,5 @@
 === Passwords Evolved ===
-Contributors: carlalexander, celsobessa, carstenbach
+Contributors: carlalexander, celsobessa, carstenbach, riper81
 Donate link: https://paypal.me/twigpress
 Author URI: https://carlalexander.ca
 Plugin URI: https://github.com/carlalexander/passwords-evolved
@@ -7,7 +7,7 @@ Tags: security, authentication, password enforcement, password hashing, argon2, 
 Requires at least: 5.2
 Tested up to: 5.9.3
 Requires PHP: 5.6
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -42,6 +42,12 @@ No, the plugin never sends your full password to a 3rd party for verification. T
 The plugin then handles the rest of the password validation itself. It compares the SHA-1 hashed version of your password to the passwords returned by the 3rd party. We call this process [k-anonymity](https://en.wikipedia.org/wiki/K-anonymity). (You can read more about validating leaked passwords with it [here](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/).)
 
 == Changelog ==
+
+= 1.3.1 =
+
+*Released: 2022-04-09*
+
+ * Add `es_MX` and `es_CR` translations [riper81]
 
 = 1.3.0 =
 
