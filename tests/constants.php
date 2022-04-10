@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
 /*
- * This file is part of Ymir WordPress plugin.
+ * This file is part of the Passwords Evolved WordPress plugin.
  *
- * (c) Carl Alexander <support@ymirapp.com>
+ * (c) Carl Alexander <contact@carlalexander.ca>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
