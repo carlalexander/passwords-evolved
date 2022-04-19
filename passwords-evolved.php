@@ -14,7 +14,7 @@ Plugin Name: Passwords Evolved
 Description: WordPress password authentication for the modern era.
 Author: Carl Alexander
 Author URI: https://carlalexander.ca
-Version: 1.3.1
+Version: 1.3.2
 Text Domain: passwords-evolved
 Domain Path: /resources/translations
 License: GPL3
