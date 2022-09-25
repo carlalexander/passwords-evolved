@@ -27,7 +27,7 @@ class AdminPage extends AbstractAdminPage
      */
     public function get_capability()
     {
-        return 'install_plugins';
+        return 'edit_users';
     }
 
     /**

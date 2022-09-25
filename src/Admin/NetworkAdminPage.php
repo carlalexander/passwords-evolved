@@ -27,7 +27,7 @@ class NetworkAdminPage extends AbstractAdminPage
      */
     public function get_capability()
     {
-        return 'manage_network_plugins';
+        return 'manage_network_users';
     }
 
     /**

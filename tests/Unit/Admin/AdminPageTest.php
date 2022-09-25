@@ -64,7 +64,7 @@ class AdminPageTest extends TestCase
     {
         $page = new AdminPage($this->get_api_client_mock(), $this->get_options_mock(), '/template/path', $this->get_translator_mock());
 
-        $this->assertEquals('install_plugins', $page->get_capability());
+        $this->assertEquals('edit_users', $page->get_capability());
     }
 
     public function test_get_menu_title()
