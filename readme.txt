@@ -5,7 +5,7 @@ Author URI: https://carlalexander.ca
 Plugin URI: https://github.com/carlalexander/passwords-evolved
 Tags: security, authentication, password enforcement, password hashing, argon2, argon2i, argon2id, bcrypt, libsodium, leaked password, compromised password, hibp, have i been pwned
 Requires at least: 5.2
-Tested up to: 6.2
+Tested up to: 6.5.2
 Requires PHP: 5.6
 Stable tag: 1.3.3
 License: GPLv3
