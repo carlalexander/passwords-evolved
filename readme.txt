@@ -6,7 +6,7 @@ Plugin URI: https://github.com/carlalexander/passwords-evolved
 Tags: security, authentication, password, have i been pwned
 Requires at least: 5.2
 Tested up to: 6.5.2
-Requires PHP: 5.6
+Requires PHP: 8.0
 Stable tag: 1.3.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html

@@ -80,47 +80,47 @@ class Container implements \ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($key)
+    public function offsetExists(mixed $offset): bool
     {
-        return array_key_exists($key, $this->values);
+        return array_key_exists($offset, $this->values);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetGet($key)
+    public function offsetGet(mixed $offset): mixed
     {
-        if (!array_key_exists($key, $this->values)) {
-            throw new \InvalidArgumentException(sprintf('Container doesn\'t have a value stored for the "%s" key.', $key));
+        if (!array_key_exists($offset, $this->values)) {
+            throw new \InvalidArgumentException(sprintf('Container doesn\'t have a value stored for the "%s" key.', $offset));
         } elseif (!$this->is_locked()) {
             $this->lock();
         }
 
-        return $this->values[$key] instanceof \Closure ? $this->values[$key]($this) : $this->values[$key];
+        return $this->values[$offset] instanceof \Closure ? $this->values[$offset]($this) : $this->values[$offset];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($key, $value)
+    public function offsetSet(mixed $offset, $value): void
     {
         if ($this->locked) {
             throw new \RuntimeException('Container is locked and cannot be modified.');
         }
 
-        $this->values[$key] = $value;
+        $this->values[$offset] = $value;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($key)
+    public function offsetUnset(mixed $offset): void
     {
         if ($this->locked) {
             throw new \RuntimeException('Container is locked and cannot be modified.');
         }
 
-        unset($this->values[$key]);
+        unset($this->values[$offset]);
     }
 
     /**
