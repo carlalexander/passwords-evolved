@@ -8,7 +8,7 @@ jobs:
     name: Update plugin assets and readme on WordPress.org
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Update plugin assets and readme
         uses: 10up/action-wordpress-plugin-asset-update@develop
         env:
