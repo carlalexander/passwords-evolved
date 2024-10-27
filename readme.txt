@@ -15,6 +15,8 @@ A reimagining of WordPress authentication using modern security practices.
 
 == Description ==
 
+**Important Notice:** This plugin is no longer supported on wordpress.org. Please open issues on [GitHub](https://github.com/carlalexander/passwords-evolved/issues).
+
 The goal of this plugin is to shore up the WordPress authentication using standard security practice recommendations. At this time, the plugin improves WordPress authentication by doing the following:
 
 = Enforcing uncompromised passwords =
