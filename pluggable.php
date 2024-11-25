@@ -92,10 +92,15 @@ if (!function_exists('wp_set_password')) {
     {
         global $wpdb;
 
+        $old_user_data = get_userdata($user_id);
+
         $hash = wp_hash_password($password);
+
         $wpdb->update($wpdb->users, array('user_pass' => $hash, 'user_activation_key' => ''), array('ID' => $user_id));
 
-        wp_cache_delete($user_id, 'users');
+        clean_user_cache($user_id);
+
+        do_action('wp_set_password', $password, $user_id, $old_user_data);
 
         return $hash;
     }
