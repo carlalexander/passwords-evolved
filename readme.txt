@@ -7,7 +7,7 @@ Tags: security, authentication, password, have i been pwned
 Requires at least: 5.2
 Tested up to: 6.8.0
 Requires PHP: 5.6
-Stable tag: 1.3.4
+Stable tag: 1.4.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,6 +44,13 @@ No, the plugin never sends your full password to a 3rd party for verification. T
 The plugin then handles the rest of the password validation itself. It compares the SHA-1 hashed version of your password to the passwords returned by the 3rd party. We call this process [k-anonymity](https://en.wikipedia.org/wiki/K-anonymity). (You can read more about validating leaked passwords with it [here](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/).)
 
 == Changelog ==
+
+= 1.4.0 =
+
+*Released: 2025-03-22*
+
+ * Only define `wp_generate_password` for wordpress 6.8 or higher [carlalexander]
+ * Add support for `wp_hash_password_algorithm hook` in wordpress 6.8 [carlalexander]
 
 = 1.3.4 =
 
