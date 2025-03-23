@@ -18,6 +18,7 @@ use PasswordsEvolved\Subscriber\AdminPageSubscriber;
 use PasswordsEvolved\Subscriber\AuthenticationSubscriber;
 use PasswordsEvolved\Subscriber\CapabilitiesSubscriber;
 use PasswordsEvolved\Subscriber\NetworkAdminPageSubscriber;
+use PasswordsEvolved\Subscriber\PasswordHashingSubscriber;
 use PasswordsEvolved\Subscriber\ResetPasswordSubscriber;
 use PasswordsEvolved\Subscriber\TranslationsSubscriber;
 use PasswordsEvolved\Subscriber\UserProfileSubscriber;
@@ -43,6 +44,7 @@ class EventManagementConfiguration implements ContainerConfigurationInterface
             $subscribers = array(
                 new AuthenticationSubscriber($container['api_client']),
                 new CapabilitiesSubscriber($container['options']->get('enforced_roles', array('administrator')), $container['wordpress.roles']),
+                new PasswordHashingSubscriber(),
                 new ResetPasswordSubscriber($container['api_client'], $container['translator']),
                 new TranslationsSubscriber($container['plugin_domain'], $container['plugin_path'] . '/resources/translations'),
                 new UserProfileSubscriber($container['api_client']),
