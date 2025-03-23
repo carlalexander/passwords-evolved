@@ -17,6 +17,32 @@ use PasswordsEvolved\Password\Generator\PasswordGeneratorInterface;
  * @author Carl Alexander <contact@carlalexander.ca>
  */
 
+if (!function_exists('wp_generate_password')) {
+    /**
+     * Generates a random password that hasn't been compromised.
+     *
+     * @param int  $length
+     * @param bool $special_chars
+     * @param bool $extra_special_chars
+     *
+     * @return string
+     */
+    function wp_generate_password($length = PasswordGeneratorInterface::MIN_LENGTH, $special_chars = true, $extra_special_chars = false)
+    {
+        global $passwords_evolved;
+
+        $password = $passwords_evolved->get_password_generator()->generate_password($length, $special_chars, $extra_special_chars);
+
+        return apply_filters('random_password', $password);
+    }
+}
+
+// Due to the password hashing changes in WordPress 6.8, we no longer need to define the rest of
+// the pluggable functions.
+if (version_compare(get_bloginfo('version'), '6.8', '>=')) {
+    return;
+}
+
 if (!function_exists('wp_check_password')) {
     /**
      * Checks the given plaintext password against the given encrypted password hash.
@@ -39,26 +65,6 @@ if (!function_exists('wp_check_password')) {
         }
 
         return apply_filters('check_password', $check, $password, $hash, $user_id);
-    }
-}
-
-if (!function_exists('wp_generate_password')) {
-    /**
-     * Generates a random password that hasn't been compromised.
-     *
-     * @param int  $length
-     * @param bool $special_chars
-     * @param bool $extra_special_chars
-     *
-     * @return string
-     */
-    function wp_generate_password($length = PasswordGeneratorInterface::MIN_LENGTH, $special_chars = true, $extra_special_chars = false)
-    {
-        global $passwords_evolved;
-
-        $password = $passwords_evolved->get_password_generator()->generate_password($length, $special_chars, $extra_special_chars);
-
-        return apply_filters('random_password', $password);
     }
 }
 
