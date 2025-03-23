@@ -50,7 +50,7 @@ The plugin then handles the rest of the password validation itself. It compares 
 *Released: 2025-03-22*
 
  * Only define `wp_generate_password` for wordpress 6.8 or higher [carlalexander]
- * Add support for `wp_hash_password_algorithm hook` in wordpress 6.8 [carlalexander]
+ * Add support for `wp_hash_password_algorithm` hook in wordpress 6.8 [carlalexander]
 
 = 1.3.4 =
 
